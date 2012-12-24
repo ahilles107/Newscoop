@@ -41,9 +41,6 @@ $cli->setHelperSet(new \Symfony\Component\Console\Helper\HelperSet($helperSet));
 
 // Register all Doctrine commands
 \Doctrine\ORM\Tools\Console\ConsoleRunner::addCommands($cli);
-/*// Register Doctrine Migrations configuration
-$configurationLoader = new Doctrine\DBAL\Migrations\Configuration\YamlConfiguration($container->getService('doctrine.connection'));
-$configurationLoader->doLoad(__DIR__ . '/../application/configs/migrations.yml');*/
 
 $cli->addCommands(array(
     new \Newscoop\Tools\Console\Command\UpdateIngestCommand(),
