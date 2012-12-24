@@ -23,7 +23,8 @@
         "kriswallsmith/buzz":               ">=0.7",
         "knplabs/knp-paginator-bundle":     "dev-master",
         "friendsofsymfony/rest-bundle":     "0.9.0",
-        "jms/serializer-bundle":            "0.9.0"
+        "jms/serializer-bundle":            "0.9.0",
+        "doctrine/migrations":              "v1.0-ALPHA1"
     },
     "repositories":[
         {
