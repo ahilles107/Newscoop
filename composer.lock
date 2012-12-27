@@ -1,5 +1,5 @@
 {
-    "hash": "f047eef6a9e90ff6c6d24504047a952b",
+    "hash": "c61ba306e18015e54081aff463929ffa",
     "packages": [
         {
             "name": "Smarty3",
@@ -1012,6 +1012,53 @@
             ]
         },
         {
+            "name": "pimple/pimple",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/fabpot/Pimple.git",
+                "reference": "v1.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/fabpot/Pimple/archive/v1.0.1.zip",
+                "reference": "v1.0.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-11-11 08:32:34",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
+            "homepage": "http://pimple.sensiolabs.org",
+            "keywords": [
+                "dependency injection",
+                "container"
+            ]
+        },
+        {
             "name": "sensio/distribution-bundle",
             "version": "2.1.x-dev",
             "target-dir": "Sensio/Bundle/DistributionBundle",
@@ -1151,6 +1198,86 @@
                 }
             ],
             "description": "This bundle generates code for you"
+        },
+        {
+            "name": "silex/silex",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/fabpot/Silex.git",
+                "reference": "bd523d5970bb093d1d2c709e91a7f72b70c39108"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/fabpot/Silex/archive/bd523d5970bb093d1d2c709e91a7f72b70c39108.zip",
+                "reference": "bd523d5970bb093d1d2c709e91a7f72b70c39108",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "pimple/pimple": "1.*",
+                "symfony/event-dispatcher": ">=2.1,<2.3-dev",
+                "symfony/http-foundation": ">=2.1,<2.3-dev",
+                "symfony/http-kernel": ">=2.1,<2.3-dev",
+                "symfony/routing": ">=2.1,<2.3-dev"
+            },
+            "require-dev": {
+                "monolog/monolog": ">=1.0.0,<1.2-dev",
+                "twig/twig": ">=1.8.0,<2.0-dev",
+                "swiftmailer/swiftmailer": "4.2.*",
+                "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
+                "symfony/security": ">=2.1,<2.3-dev",
+                "symfony/config": ">=2.1,<2.3-dev",
+                "symfony/locale": ">=2.1,<2.3-dev",
+                "symfony/form": ">=2.1,<2.3-dev",
+                "symfony/browser-kit": ">=2.1,<2.3-dev",
+                "symfony/css-selector": ">=2.1,<2.3-dev",
+                "symfony/finder": ">=2.1,<2.3-dev",
+                "symfony/monolog-bridge": ">=2.1,<2.3-dev",
+                "symfony/process": ">=2.1,<2.3-dev",
+                "symfony/translation": ">=2.1,<2.3-dev",
+                "symfony/twig-bridge": ">=2.1,<2.3-dev",
+                "symfony/validator": ">=2.1,<2.3-dev",
+                "symfony/serializer": ">=2.1,<2.3-dev"
+            },
+            "suggest": {
+                "symfony/browser-kit": ">=2.1,<2.3-dev",
+                "symfony/css-selector": ">=2.1,<2.3-dev",
+                "symfony/dom-crawler": ">=2.1,<2.3-dev"
+            },
+            "time": "2012-12-18 11:32:45",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Silex": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch",
+                    "homepage": "http://wiedler.ch/igor/"
+                }
+            ],
+            "description": "The PHP micro-framework based on the Symfony2 Components",
+            "homepage": "http://silex.sensiolabs.org",
+            "keywords": [
+                "microframework"
+            ]
         },
         {
             "name": "symfony/monolog-bundle",
@@ -1301,6 +1428,68 @@
             ]
         },
         {
+            "name": "taluu/doctrine-orm-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/Taluu/nutwerk-orm-extension.git",
+                "reference": "a63f8810e42c6d914e8b83651359755b8866a647"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/Taluu/nutwerk-orm-extension/archive/a63f8810e42c6d914e8b83651359755b8866a647.zip",
+                "reference": "a63f8810e42c6d914e8b83651359755b8866a647",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "silex/silex": "1.0.*",
+                "doctrine/orm": ">= 2.3.0, < 2.4.0-beta",
+                "doctrine/common": ">= 2.3.0, < 2.4.0-beta",
+                "doctrine/dbal": ">= 2.3.0, < 2.4.0-beta"
+            },
+            "suggest": {
+                "symfony/console": "Necessary if you would like to use the Doctrine CLI tools"
+            },
+            "time": "2012-11-09 09:46:57",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Nutwerk\\Provider": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Jakubowski",
+                    "homepage": "http://nutwerk.de/"
+                },
+                {
+                    "name": "Baptiste \"Talus\" Clavié",
+                    "homepage": "http://www.talus-works.net"
+                }
+            ],
+            "description": "Doctrine ORM provider for Silex",
+            "homepage": "https://github.com/taluu/nutwerk-orm-extension",
+            "keywords": [
+                "silex",
+                "database",
+                "orm",
+                "doctrine",
+                "extension",
+                "provider"
+            ]
+        },
+        {
             "name": "twig/twig",
             "version": "dev-master",
             "source": {
@@ -1403,6 +1592,8 @@
     "stability-flags": {
         "zendframework/zendframework1": 20,
         "knplabs/knp-paginator-bundle": 20,
-        "doctrine/migrations": 15
+        "doctrine/migrations": 15,
+        "silex/silex": 20,
+        "taluu/doctrine-orm-provider": 20
     }
 }

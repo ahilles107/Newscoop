@@ -19,4 +19,9 @@ class Version20121224061158 extends AbstractMigration
     {
         $this->addSql('DROP TABLE addresses33');
     }
+
+    public function getName()
+    {
+      return '4.1_test_name';
+    }
 }
