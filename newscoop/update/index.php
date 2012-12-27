@@ -10,10 +10,11 @@ require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../conf/database_conf.php';
 
 use Symfony\Component\Process;
+use Newscoop\Update;
 
 $app = new Silex\Application();
 $app['debug'] = true;
-$app['migration_conf'] = '--configuration="'.__DIR__.'/../application/configs/migrations.yml"';
+$app['migration_conf'] = __DIR__ . '/../application/configs/migrations.yml';
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
@@ -37,15 +38,19 @@ $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
     )),
 ));
 
-
+$app['newscoop_update'] = new Update($app['db'], $app['migration_conf']);
 $em = $app['db.orm.em'];
 
 // check for new updates
 
 $app->get('/', function() use($app, $em) {
-    $process = new Process\Process('php ' . __DIR__.'/../scripts/newscoop.php migrations:status '.$app['migration_conf']);
+    $process = new Process\Process('php ' . __DIR__.'/../scripts/newscoop.php migrations:status --configuration="'.$app['migration_conf'].'"');
     $process->setTimeout(3600);
     $process->run();
+
+    print '<pre>';
+    print_r($app['newscoop_update']->getStatus());
+    echo '</pre>';
 
     print '<pre>' . $process->getOutput() . '</pre>';
 
