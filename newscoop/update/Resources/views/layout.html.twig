@@ -5,9 +5,9 @@
   <title>Newscoop Update</title>
   <meta name="description" content="Newscoop update process">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="Resources/css/normalize.min.css" rel="stylesheet" media="all" />
-  <link href="Resources/css/bootstrap.css" rel="stylesheet" media="all" />
-  <link href="Resources/css/styles.css" rel="stylesheet" media="all" />
+  <link href="./Resources/css/normalize.min.css" rel="stylesheet" media="all" />
+  <link href="./Resources/css/bootstrap.css" rel="stylesheet" media="all" />
+  <link href="./Resources/css/styles.css" rel="stylesheet" media="all" />
   
   <!-- Include the HTML5 shiv and shiv print polyfills for Internet Explorer browsers 8 and below -->
   <!--[if lt IE 9]>
@@ -16,10 +16,14 @@
 </head>
 <body>  
   <div class="container">
+    <ul class="nav nav-pills pull-right">
+      <li><a class="btn" href="logout">Logout</a></li>
+    </ul>
+    <div class="clearfix"></div>
     <div class="logobox">
       <img src="http://newscoop.dev/admin-style/images/sign_big.gif" border="0" alt="">
     </div>
-    <section role="main">      
+    <section role="main">
       {% block body %}{% endblock %}
     </section>
   </div>
