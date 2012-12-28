@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <table class="table table-striped table-bordered newscoop-status">
+      <caption>Your Newscoop current status:</caption>
+      <tbody>
+        <tr class="{% if migrationsStatus.currentVersion != migrationsStatus.latestVersion %}error{% else %}success{% endif %}">
+          <td>Current update version</td>
+          <td >{{ migrationsStatus.currentVersion }}</td>
+        </tr>
+        <tr>
+          <td>Latest avaiable version</td>
+          <td>{{ migrationsStatus.latestVersion }}</td>
+        </tr>
+        <tr>
+          <td>Executed updates number</td>
+          <td>{{ migrationsStatus.executedMigrations|length }}</td>
+        </tr>
+        <tr>
+          <td>All available updates</td>
+          <td>{{ migrationsStatus.availableMigrations|length }}</td>
+        </tr>
+        <tr class="{% if migrationsStatus.availableMigrations != migrationsStatus.newMigrations %}warning{% else %}success{% endif %}">
+          <td>New available updates</td>
+          <td>{{ migrationsStatus.newMigrations }}</td>
+        </tr>        
+      </tbody>
+    </table>
+{% endblock %}

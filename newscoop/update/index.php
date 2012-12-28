@@ -38,6 +38,10 @@ $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
     )),
 ));
 
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__ . '/Resources/views/',
+));
+
 $app['newscoop_update'] = new Update($app['db'], $app['migration_conf']);
 $em = $app['db.orm.em'];
 
@@ -47,14 +51,12 @@ $app->get('/', function() use($app, $em) {
     $process = new Process\Process('php ' . __DIR__.'/../scripts/newscoop.php migrations:status --configuration="'.$app['migration_conf'].'"');
     $process->setTimeout(3600);
     $process->run();
+    $migrationsStatus = $app['newscoop_update']->getStatus();
 
-    print '<pre>';
-    print_r($app['newscoop_update']->getStatus());
-    echo '</pre>';
 
-    print '<pre>' . $process->getOutput() . '</pre>';
-
-    return 'Hello Paweł'; 
+    return $app['twig']->render('index.html.twig', array(
+        'migrationsStatus' => $migrationsStatus,
+    ));
 });
 
 $app->post('/run-update', function() use($app) {
@@ -65,9 +67,6 @@ $app->post('/rollback-update', function() use($app) {
   //$version = $app['request']->get('version');
 });
 
-$app->get('/check-for-updates', function() use($app) {
-
-});
 
 $app->get('/check-for-releases', function() use($app) {
 
