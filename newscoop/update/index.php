@@ -19,6 +19,8 @@ $app = new Silex\Application();
 $app['debug'] = true;
 $app['migration_conf'] = __DIR__ . '/../application/configs/migrations.yml';
 
+/******************************** Providers *****************************************/
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'    =>  'pdo_mysql',
@@ -75,14 +77,10 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app['newscoop_update'] = new Update($app['db'], $app['migration_conf']);
 $em = $app['db.orm.em'];
 
-// check for new updates
+/******************************** CONTROLERS *****************************************/
 
 $app->get('/', function() use($app, $em) {
-    $process = new Process\Process('php ' . __DIR__.'/../scripts/newscoop.php migrations:status --configuration="'.$app['migration_conf'].'"');
-    $process->setTimeout(3600);
-    $process->run();
     $migrationsStatus = $app['newscoop_update']->getStatus();
-
 
     return $app['twig']->render('index.html.twig', array(
         'migrationsStatus' => $migrationsStatus,
@@ -91,12 +89,30 @@ $app->get('/', function() use($app, $em) {
 ->bind('status');
 
 $app->post('/run-update', function() use($app) {
+    $updateLog = __DIR__ . '/../cache/update_log.txt';
+    $process = new Process\Process('php ' . __DIR__.'/../scripts/newscoop.php migrations:migrate --no-interaction --configuration="' . $app['migration_conf'] . '" >' . $updateLog);
+    $process->start();
 
-});
+    while ($process->isRunning()) {
+        continue;
+    }
 
-$app->post('/rollback-update', function() use($app) {
-  //$version = $app['request']->get('version');
-});
+    $migrationsStatus = $app['newscoop_update']->getStatus();
+
+    $newscoopStatusHtml = $app['twig']->render('newscoop-status.html.twig', array(
+        'migrationsStatus' => $migrationsStatus,
+    ));
+
+    return json_encode(array('status' => $process->isSuccessful(), 'newscoopStatusHtml' => $newscoopStatusHtml));
+})
+->bind('runUpdate');
+
+$app->get('/load-result', function() use($app) {
+  $updateLog = __DIR__ . '/../cache/update_log.txt';
+
+  return file_get_contents($updateLog);
+})
+->bind('loadResult');
 
 
 $app->get('/check-for-releases', function() use($app) {

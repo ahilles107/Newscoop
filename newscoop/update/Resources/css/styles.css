@@ -13,6 +13,7 @@ form.newscoop-login-form {
 table.newscoop-status {
   width: 500px;
   margin: 5px auto;
+  margin-bottom: 20px;
 }
 
 table.newscoop-status caption {
@@ -54,4 +55,15 @@ table.newscoop-status caption {
 .logobox {
     height:102px;
     text-align:center;
+}
+
+.newscoop-console-output {
+  display: none;
+  margin-top: 15px;
+  font-family:Courier;
+  color: #CCCCCC;
+  background: #000000;
+  border: 3px double #CCCCCC;
+  padding: 10px;
+  height: 340px;
 }

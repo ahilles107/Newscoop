@@ -61,6 +61,7 @@ class Update
         $newMigrations = count($availableMigrations) - count($executedMigrations);
 
         return array(
+            'codeVersion' => \Newscoop\Version::VERSION,
             'currentVersion' => $currentVersion,
             'latestVersion' => $latestVersion,
             'executedMigrations' => $executedMigrations,
