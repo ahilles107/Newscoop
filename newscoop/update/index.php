@@ -13,6 +13,7 @@ use Newscoop\Update;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Process;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Filesystem\Filesystem;
 
 $app = new Silex\Application();
 
@@ -90,27 +91,44 @@ $app->get('/', function() use($app, $em) {
 
 $app->post('/run-update', function() use($app) {
     $updateLog = __DIR__ . '/../cache/update_log.txt';
-    $process = new Process\Process('php ' . __DIR__.'/../scripts/newscoop.php migrations:migrate --no-interaction --configuration="' . $app['migration_conf'] . '" >' . $updateLog);
+
+    $clearCache = new Process\Process('php ' . __DIR__ . '/../scripts/newscoop.php cache:clear');
+    $clearCache->run();
+    $filesystem = new Filesystem();
+
+    if (!is_writable($updateLog)) {
+        $filesystem->chmod(__DIR__ . '/../cache/', 0775);
+        $filesystem->touch($updateLog);
+    }
+
+    $process = new Process\Process('php ' . __DIR__ . '/../scripts/newscoop.php newscoop:update >>'. $updateLog);
     $process->start();
 
     while ($process->isRunning()) {
         continue;
     }
 
-    $migrationsStatus = $app['newscoop_update']->getStatus();
+//    echo var_dump($process->getOutput());
 
-    $newscoopStatusHtml = $app['twig']->render('newscoop-status.html.twig', array(
-        'migrationsStatus' => $migrationsStatus,
-    ));
-
-    return json_encode(array('status' => $process->isSuccessful(), 'newscoopStatusHtml' => $newscoopStatusHtml));
+    return json_encode(array('status' => $process->isRunning()));
 })
 ->bind('runUpdate');
 
 $app->get('/load-result', function() use($app) {
-  $updateLog = __DIR__ . '/../cache/update_log.txt';
+    $updateLog = __DIR__ . '/../cache/update_log.txt';
+    $endUpdate = __DIR__ . '/../cache/end_update';
+    $filesystem = new Filesystem();
 
-  return file_get_contents($updateLog);
+    if ($filesystem->exists($endUpdate)) {
+        $migrationsStatus = $app['newscoop_update']->getStatus();
+        $newscoopStatusHtml = $app['twig']->render('newscoop-status.html.twig', array(
+            'migrationsStatus' => $migrationsStatus
+        ));
+
+        return json_encode(array('status' => 'finished', 'newscoopStatusHtml' => $newscoopStatusHtml, 'content' => file_get_contents($updateLog)));
+    }
+
+    return json_encode(array('status' => 'continue', 'content' => file_get_contents($updateLog)));
 })
 ->bind('loadResult');
 

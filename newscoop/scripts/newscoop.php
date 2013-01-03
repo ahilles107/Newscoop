@@ -47,6 +47,9 @@ $cli->addCommands(array(
     new \Newscoop\Tools\Console\Command\LogMaintenanceCommand(),
     new \Newscoop\Tools\Console\Command\SendStatsCommand(),
     new \Newscoop\Tools\Console\Command\UpdateImageStorageCommand(),
+    new \Newscoop\Tools\Console\Command\CacheClearCommand(),
+    new \Newscoop\Tools\Console\Command\VendorsUpdateCommand(),
+    new \Newscoop\Tools\Console\Command\UpdateNewscoopCommand(),
 
     // Migrations Commands
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),

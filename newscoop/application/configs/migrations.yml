@@ -1,4 +1,4 @@
 name: Newscoop Migrations
 migrations_namespace: NewscoopMigrations
 table_name: newscoop_migration_versions
-migrations_directory: ../update/migrations/
+migrations_directory: ../../update/migrations/

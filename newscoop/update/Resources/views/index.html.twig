@@ -27,12 +27,19 @@
     var loadResult = function(){
       var date = new Date();
       $.ajax({
-        url: "{{ app.url_generator.generate('loadResult') }}?v=" + date.getSeconds(),
+        url: "{{ app.url_generator.generate('loadResult') }}?v=" + date.getMinutes()+date.getSeconds(),
         type: "GET",
+        dataType: 'json'
       }).done(function(msg) {
-        $('pre.js-newscoop-console-output').html(msg);
+        $('pre.js-newscoop-console-output').html(msg.content);
         var height = $('pre.js-newscoop-console-output')[0].scrollHeight;
         $('pre.js-newscoop-console-output').scrollTop(height);
+
+        if (msg.status === 'finished') {
+          clearInterval(checkForUpdates);
+          $('table.js-newscoop-status').replaceWith(msg.newscoopStatusHtml);
+          return;
+        }
       });
     }
 
@@ -42,13 +49,8 @@
       type: "POST",
       dataType: "json"
     }).done(function(msg) {
-      if (checkForUpdates) {
-        clearInterval(checkForUpdates);
-      }
-      $('table.js-newscoop-status').replaceWith(msg.newscoopStatusHtml);
-    });
-
-    checkForUpdates = setInterval(loadResult, 70);
+      checkForUpdates = setInterval(loadResult, 700);
+    });  
   })
 </script>
 {% endblock %}
