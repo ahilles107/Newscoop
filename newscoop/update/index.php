@@ -108,8 +108,6 @@ $app->post('/run-update', function() use($app) {
         continue;
     }
 
-//    echo var_dump($process->getOutput());
-
     return json_encode(array('status' => $process->isRunning()));
 })
 ->bind('runUpdate');
@@ -132,10 +130,11 @@ $app->get('/load-result', function() use($app) {
 })
 ->bind('loadResult');
 
-
+// TODO
 $app->get('/check-for-releases', function() use($app) {
 
-});
+})
+>bind('checkForUpdates');
 
 $app->get('/login', function(Request $request) use ($app) {
     return $app['twig']->render('login.html.twig', array(

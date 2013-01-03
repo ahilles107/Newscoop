@@ -10,9 +10,11 @@ namespace Newscoop\Tools\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
+use Console\Input\InputInterface;
+use Console\Output\OutputInterface;
 
 /**
- * Log maintenance command
+ * Clear Newscoop cache command
  */
 class CacheClearCommand extends Console\Command\Command
 {
@@ -23,13 +25,13 @@ class CacheClearCommand extends Console\Command\Command
     {
         $this
         ->setName('cache:clear')
-        ->setDescription('Clear Newscoop cache files.');
+        ->setDescription('Clear Newscoop cache directory (remove old one and create new).');
     }
 
     /**
      * @see Console\Command\Command
      */
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
 

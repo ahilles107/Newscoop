@@ -12,7 +12,7 @@ use Symfony\Component\Process;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Log maintenance command
+ * Update newscoop vendors with composer install
  */
 class VendorsUpdateCommand extends Console\Command\Command
 {
@@ -36,6 +36,7 @@ class VendorsUpdateCommand extends Console\Command\Command
                 echo $buffer;
             }
         };
+
         echo "\n \n";
 
         $installVendors = new Process\Process('cd '.__DIR__ . '/../../../../../../ && php composer.phar install');

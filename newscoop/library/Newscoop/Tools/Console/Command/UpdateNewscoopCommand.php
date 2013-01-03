@@ -23,7 +23,7 @@ class UpdateNewscoopCommand extends Console\Command\Command
     {
         $this
         ->setName('newscoop:update')
-        ->setDescription('Update Newscoop with migrations in php fork.');
+        ->setDescription('Update Newscoop with migrations.');
     }
 
     /**
@@ -36,7 +36,7 @@ class UpdateNewscoopCommand extends Console\Command\Command
         $newscoopConsole = __DIR__ . '/../../../../../scripts/newscoop.php';
         $filesystem = new Filesystem();
 
-        $process = new Process\Process('php ' . $newscoopConsole . ' migrations:migrate  --dry-run --no-interaction --configuration="' . $migrationConf . '"');
+        $process = new Process\Process('php ' . $newscoopConsole . ' migrations:migrate --no-interaction --configuration="' . $migrationConf . '"');
         $process->setTimeout(3600);
         $process->run(function($type, $buffer) use ($updateLog) {
             $fh = fopen($updateLog, 'a');
@@ -52,6 +52,7 @@ class UpdateNewscoopCommand extends Console\Command\Command
             fclose($fh);
         });
         
+        // create file for stop ajax checking (usefull when live console preview will work again)
         $filesystem->touch(__DIR__ . '/../../../../../cache/end_update');
     }
 }
