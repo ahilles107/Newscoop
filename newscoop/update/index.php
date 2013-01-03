@@ -134,7 +134,7 @@ $app->get('/load-result', function() use($app) {
 $app->get('/check-for-releases', function() use($app) {
 
 })
->bind('checkForUpdates');
+->bind('checkForUpdates');
 
 $app->get('/login', function(Request $request) use ($app) {
     return $app['twig']->render('login.html.twig', array(
