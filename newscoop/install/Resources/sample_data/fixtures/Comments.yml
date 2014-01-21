@@ -1,0 +1,19 @@
+Newscoop\Entity\Comment:
+    comment{1..15}:
+        commenter: <numberBetween(1, 19)>
+        forum: 2
+        parent: null
+        article_num: <numberBetween(64, 93)>
+        language: 1
+        subject: <sentence(6)>
+        message: <sentence(30)>
+        thread_level: 0
+        thread_order: 0
+        status: approved
+        ip: <ipv4()>
+        time_created: <dateTimeBetween('-200 days', 'now')>
+        time_updated: <dateTimeBetween($time_created, 'now')>
+        likes: 0
+        dislikes: 0
+        recommended: 0
+        indexed: 1

@@ -35,6 +35,13 @@ class Article
     private $language;
 
     /**
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="Number")
+     * @var int
+     */
+    private $number;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Newscoop\Entity\Publication")
      * @ORM\JoinColumn(name="IdPublication", referencedColumnName="Id")
      * @var Newscoop\Entity\Publication
@@ -81,17 +88,10 @@ class Article
     private $fields;
 
     /**
-     * Article Authors for Newscoop\Gimme
+     * Article Authors used by Newscoop API
      * @var object
      */
     private $articleAuthors;
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="Number")
-     * @var int
-     */
-    private $number;
 
     /**
      * @ORM\Column(name="Name", nullable=True)
@@ -124,7 +124,7 @@ class Article
     private $comments_enabled;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="thread", indexBy="language")
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="thread")
      * @var Newscoop\Entity\Comments
      */
     private $comments;

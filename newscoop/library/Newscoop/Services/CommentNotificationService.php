@@ -44,6 +44,12 @@ class CommentNotificationService
         $comment = $this->commentService->find($event['id']);
         $article = new \Article($comment->getLanguage()->getId(), $comment->getThread()->getNumber());
         $authors = \ArticleAuthor::GetAuthorsByArticle($comment->getThread()->getNumber(), $comment->getLanguage()->getId());
-        $this->emailService->sendCommentNotification($comment, $article, $authors, $this->userService->getCurrentUser());
+
+        $this->emailService->sendCommentNotification(
+            $comment,
+            $article,
+            $authors,
+            $this->userService->getCurrentUser()
+        );
     }
 }

@@ -58,6 +58,7 @@ $cli->addCommands(array(
     new \Newscoop\Tools\Console\Command\InstallNewscoopCommand(),
     new \Newscoop\Tools\Console\Command\CreateOAuthClientCommand(),
     new \Newscoop\Tools\Console\Command\GenerateORMSchemaCommand(),
+    new \Newscoop\Tools\Console\Command\LoadDamoDataFixturesCommand(),
 ));
 
 $cli->run($input);

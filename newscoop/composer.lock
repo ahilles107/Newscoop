@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b978132e43ca3c1ec16ed85be13d6f1b",
+    "hash": "6eb805342def468aa113eef3c150fda3",
     "packages": [
         {
             "name": "behat/behat",
@@ -1213,6 +1213,52 @@
             "time": "2013-08-15 13:30:47"
         },
         {
+            "name": "fzaninotto/faker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "ff43a34c9cff2a22e765a8ebc2be3ec591165049"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/ff43a34c9cff2a22e765a8ebc2be3ec591165049",
+                "reference": "ff43a34c9cff2a22e765a8ebc2be3ec591165049",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Faker": "src/",
+                    "Faker\\PHPUnit": "test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2014-01-06 17:50:11"
+        },
+        {
             "name": "guzzle/guzzle",
             "version": "dev-master",
             "source": {
@@ -1303,6 +1349,58 @@
                 "web service"
             ],
             "time": "2013-03-11 22:42:27"
+        },
+        {
+            "name": "h4cc/alice-fixtures-bundle",
+            "version": "dev-master",
+            "target-dir": "h4cc/AliceFixturesBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/h4cc/AliceFixturesBundle.git",
+                "reference": "a0dc2f06558f459ae5b6ab4219725334c17ff0b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/h4cc/AliceFixturesBundle/zipball/a0dc2f06558f459ae5b6ab4219725334c17ff0b6",
+                "reference": "a0dc2f06558f459ae5b6ab4219725334c17ff0b6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": "~2.1",
+                "doctrine/orm": "~2.1",
+                "nelmio/alice": "~1.5",
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7",
+                "symfony/framework-bundle": "~2.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "h4cc\\AliceFixturesBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julius Beckmann",
+                    "email": "github@h4cc.de"
+                }
+            ],
+            "description": "Symfony2 Bundle for loading fixture data with the Alice library.",
+            "keywords": [
+                "Symfony2",
+                "alice",
+                "fixtures",
+                "loader",
+                "orm"
+            ],
+            "time": "2014-01-05 13:22:15"
         },
         {
             "name": "hybridauth/hybridauth",
@@ -2150,12 +2248,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "296095fe2ee052161f8226d55df775103bb6c259"
+                "reference": "01a01a4841ea749426834d127c897f4dc9d62611"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/296095fe2ee052161f8226d55df775103bb6c259",
-                "reference": "296095fe2ee052161f8226d55df775103bb6c259",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/01a01a4841ea749426834d127c897f4dc9d62611",
+                "reference": "01a01a4841ea749426834d127c897f4dc9d62611",
                 "shasum": ""
             },
             "require": {
@@ -2209,7 +2307,61 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-01-14 13:24:06"
+            "time": "2014-01-15 09:37:32"
+        },
+        {
+            "name": "nelmio/alice",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nelmio/alice.git",
+                "reference": "b36f9c0ee0ff09e21ccc5c10843ddb0ba43ca44f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nelmio/alice/zipball/b36f9c0ee0ff09e21ccc5c10843ddb0ba43ca44f",
+                "reference": "b36f9c0ee0ff09e21ccc5c10843ddb0ba43ca44f",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": "~1.0",
+                "php": ">=5.3",
+                "symfony/yaml": "~2.0"
+            },
+            "require-dev": {
+                "doctrine/common": "~2.3",
+                "phpunit/phpunit": "3.7.*",
+                "symfony/property-access": "~2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Nelmio\\Alice\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nelmio",
+                    "homepage": "http://nelm.io"
+                }
+            ],
+            "description": "Expressive fixtures generator",
+            "keywords": [
+                "Fixture",
+                "data",
+                "orm",
+                "test"
+            ],
+            "time": "2014-01-16 09:50:22"
         },
         {
             "name": "newscoop/plugins-installer",
@@ -3194,12 +3346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "704f9823c593216bcbe673a5ca2991dc94bee8e2"
+                "reference": "b30469821c766faa08ce7dc432f67de5aa29d4e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/704f9823c593216bcbe673a5ca2991dc94bee8e2",
-                "reference": "704f9823c593216bcbe673a5ca2991dc94bee8e2",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/b30469821c766faa08ce7dc432f67de5aa29d4e3",
+                "reference": "b30469821c766faa08ce7dc432f67de5aa29d4e3",
                 "shasum": ""
             },
             "require": {
@@ -3294,7 +3446,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2014-01-13 20:28:00"
+            "time": "2014-01-15 21:14:52"
         },
         {
             "name": "twig/extensions",
@@ -3750,12 +3902,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "4e0deaeacbcc7f54d6f854cde5705b4375f56108"
+                "reference": "fc5ddee4879dfcee788d9cb4b92af9028bc3d7e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/4e0deaeacbcc7f54d6f854cde5705b4375f56108",
-                "reference": "4e0deaeacbcc7f54d6f854cde5705b4375f56108",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/fc5ddee4879dfcee788d9cb4b92af9028bc3d7e8",
+                "reference": "fc5ddee4879dfcee788d9cb4b92af9028bc3d7e8",
                 "shasum": ""
             },
             "require-dev": {
@@ -3797,7 +3949,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2014-01-15 00:51:54"
+            "time": "2014-01-15 15:06:06"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4191,6 +4343,7 @@
         "raulfraile/ladybug-bundle": 20,
         "yzalis/crontab": 20,
         "excelwebzone/recaptcha-bundle": 20,
+        "h4cc/alice-fixtures-bundle": 20,
         "phpspec/phpspec": 20
     },
     "platform": {

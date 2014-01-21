@@ -780,7 +780,26 @@ UNLOCK TABLES;
 
 LOCK TABLES `comment_commenter` WRITE;
 /*!40000 ALTER TABLE `comment_commenter` DISABLE KEYS */;
-INSERT INTO `comment_commenter` VALUES (1,NULL,'','','Anonymous User','79.101.185.177','2010-12-30 09:28:14','2010-12-30 09:38:36'),(2,NULL,'test@persona.com','','Test Persona','79.101.185.177','2010-12-30 09:28:14','1970-01-01 00:00:00'),(3,NULL,'rio@mutd.co.uk','','Rio Ferdinand','79.101.185.177','2010-12-30 09:29:51','1970-01-01 00:00:00'),(4,NULL,'jos@hua.com','','Joshua','79.101.185.177','2010-12-30 09:38:36','1970-01-01 00:00:00'),(5,NULL,'pia@gmail.com','','Pia Zadora','79.101.185.177','2010-12-30 12:23:27','1970-01-01 00:00:00'),(6,NULL,'ttm@gmail.com','','Twittermaniac','79.101.185.177','2010-12-30 12:24:44','1970-01-01 00:00:00'),(7,NULL,'swenge@gmail.com','','Swen','79.101.185.177','2010-12-30 12:26:37','1970-01-01 00:00:00'),(8,NULL,'pia@gmail.com','','Papadopulos','79.101.185.177','2010-12-30 12:28:12','1970-01-01 00:00:00'),(9,NULL,'bri@gitte.de','','Brigitte','79.101.185.177','2010-12-30 12:31:35','1970-01-01 00:00:00'),(10,NULL,'winn@eto.uu','','Winnetou','94.189.197.96','2011-01-04 14:44:03','1970-01-01 00:00:00'),(11,NULL,'black@georg.iye','','Black Georgios','46.4.76.175','2011-07-07 09:32:38','1970-01-01 00:00:00'),(12,47,'ozan@dispostable.com','','z','213.220.197.60','2012-03-08 10:48:44','0000-00-00 00:00:00'),(13,31,'ljuba.rankovic@sourcefabric.org','','Test Persona','79.101.75.169','2012-03-08 11:31:02','0000-00-00 00:00:00'),(14,NULL,'asd@asdqwd.com','','qweqwe','84.19.71.67','2012-03-13 09:40:36','0000-00-00 00:00:00'),(15,47,'ozan@dispostable.com','','<a href=\'/user/profile/Ozan+Ozbek\'>Ozan Ozbek</a>','84.19.71.67','2012-03-13 09:42:16','0000-00-00 00:00:00'),(16,31,'ljuba.rankovic@sourcefabric.org','','<a href=\'/user/profile/ljubar\'>Ljuba Rankovic</a>','188.2.52.247','2012-03-13 09:42:46','0000-00-00 00:00:00'),(17,NULL,'john@drjohn.com','','Dr John','127.0.0.1','2013-04-24 15:43:54','0000-00-00 00:00:00'),(18,54,'ljuba.rankovic@sourcefabric.org','','Boom-boom Boba','127.0.0.1','2013-05-02 10:11:13','0000-00-00 00:00:00'),(19,NULL,'bla@ckperso.na','','Black Persona','127.0.0.1','2013-05-02 10:13:28','0000-00-00 00:00:00');
+INSERT INTO `comment_commenter` VALUES 
+(1,NULL,'','','Anonymous User','79.101.185.177','2010-12-30 09:28:14','2010-12-30 09:38:36'),
+(2,NULL,'test@persona.com','','Test Persona','79.101.185.177','2010-12-30 09:28:14','1970-01-01 00:00:00'),
+(3,NULL,'rio@mutd.co.uk','','Rio Ferdinand','79.101.185.177','2010-12-30 09:29:51','1970-01-01 00:00:00'),
+(4,NULL,'jos@hua.com','','Joshua','79.101.185.177','2010-12-30 09:38:36','1970-01-01 00:00:00'),
+(5,NULL,'pia@gmail.com','','Pia Zadora','79.101.185.177','2010-12-30 12:23:27','1970-01-01 00:00:00'),
+(6,NULL,'ttm@gmail.com','','Twittermaniac','79.101.185.177','2010-12-30 12:24:44','1970-01-01 00:00:00'),
+(7,NULL,'swenge@gmail.com','','Swen','79.101.185.177','2010-12-30 12:26:37','1970-01-01 00:00:00'),
+(8,NULL,'pia@gmail.com','','Papadopulos','79.101.185.177','2010-12-30 12:28:12','1970-01-01 00:00:00'),
+(9,NULL,'bri@gitte.de','','Brigitte','79.101.185.177','2010-12-30 12:31:35','1970-01-01 00:00:00'),
+(10,NULL,'winn@eto.uu','','Winnetou','94.189.197.96','2011-01-04 14:44:03','1970-01-01 00:00:00'),
+(11,NULL,'black@georg.iye','','Black Georgios','46.4.76.175','2011-07-07 09:32:38','1970-01-01 00:00:00'),
+(12,47,'ozan@dispostable.com','','z','213.220.197.60','2012-03-08 10:48:44','0000-00-00 00:00:00'),
+(13,31,'ljuba.rankovic@sourcefabric.org','','Test Persona','79.101.75.169','2012-03-08 11:31:02','0000-00-00 00:00:00'),
+(14,NULL,'asd@asdqwd.com','','qweqwe','84.19.71.67','2012-03-13 09:40:36','0000-00-00 00:00:00'),
+(15,47,'ozan@dispostable.com','','<a href=\'/user/profile/Ozan+Ozbek\'>Ozan Ozbek</a>','84.19.71.67','2012-03-13 09:42:16','0000-00-00 00:00:00'),
+(16,31,'ljuba.rankovic@sourcefabric.org','','<a href=\'/user/profile/ljubar\'>Ljuba Rankovic</a>','188.2.52.247','2012-03-13 09:42:46','0000-00-00 00:00:00'),
+(17,NULL,'john@drjohn.com','','Dr John','127.0.0.1','2013-04-24 15:43:54','0000-00-00 00:00:00'),
+(18,54,'ljuba.rankovic@sourcefabric.org','','Boom-boom Boba','127.0.0.1','2013-05-02 10:11:13','0000-00-00 00:00:00'),
+(19,NULL,'bla@ckperso.na','','Black Persona','127.0.0.1','2013-05-02 10:13:28','0000-00-00 00:00:00');
 /*!40000 ALTER TABLE `comment_commenter` ENABLE KEYS */;
 UNLOCK TABLES;
 
