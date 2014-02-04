@@ -20,6 +20,7 @@ class BootstrapService
 {
     public $mustBeWritable;
     public $basePath;
+    private $newscoopDir;
     private $filesystem;
     private $logger;
 
@@ -36,6 +37,7 @@ class BootstrapService
         $basePath = null
     ) {
         $this->mustBeWritable = $directories;
+        $this->newscoopDir = __DIR__ . '/../../../..';
         $this->filesystem = new Filesystem();
         $this->logger = $logger;
         $this->basePath = $basePath;
@@ -96,9 +98,9 @@ class BootstrapService
     }
 
     /**
-     * Reload themes reditions in datbase
+     * Warmap cache
      */
-    public function reloadRenditions()
+    public function warmapCache()
     {
         $phpFinder = new PhpExecutableFinder();
         $phpPath = $phpFinder->find();
@@ -107,11 +109,11 @@ class BootstrapService
         }
 
         $php = escapeshellarg($phpPath);
-        $newscoopConsole = escapeshellarg($this->newscoopDir.'/application/console');
-        $reloadRenditions = new Process("$php $newscoopConsole renditions:reload", null, null, null, 300);
-        $reloadRenditions->run();
-        if (!$reloadRenditions->isSuccessful()) {
-            throw new \RuntimeException('An error occurred when executing the Reload renditions command.');
+        $newscoopConsole = escapeshellarg($this->newscoopDir . '/application/console');
+        $command = new Process("$php $newscoopConsole cache:warmup", null, null, null, 3600);
+        $command->run();
+        if (!$command->isSuccessful()) {
+            var_dump($command->getErrorOutput());
         }
     }
 }
