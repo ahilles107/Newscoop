@@ -53,3 +53,8 @@ NewscoopGimmeBundleAttachments:
     resource: "@NewscoopGimmeBundle/Controller/AttachmentsController.php"
     prefix:   /
     type:     annotation
+
+NewscoopGimmeBundleSnipets:
+    resource: "@NewscoopGimmeBundle/Controller/SnippetsController.php"
+    prefix:   /
+    type:     annotation
