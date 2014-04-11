@@ -9,10 +9,14 @@
 namespace Newscoop\Entity;
 
 use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Newscoop\Entity\Snippet\SnippetTemplate;
+use Newscoop\Entity\Snippet\SnippetField;
 
 /**
  * Snippet entity
- * @ORM\Entity
+ *
+ * @ORM\Entity(repositoryClass="Newscoop\Entity\Repository\SnippetRepository")
  * @ORM\Table(name="Snippets")
  */
 class Snippet
@@ -26,9 +30,9 @@ class Snippet
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Newscoop\Entity\Snippet\Template")
+     * @ORM\ManyToOne(targetEntity="Newscoop\Entity\Snippet\SnippetTemplate", cascade={"persist"})
      * @ORM\JoinColumn(name="TemplateId", referencedColumnName="Id")
-     * @var Newscoop\Entity\Snippet\Template
+     * @var Newscoop\Entity\Snippet\SnippetTemplate
      */
     protected $template;
 
@@ -39,16 +43,32 @@ class Snippet
     protected $name;
 
     /**
-     * @ORM\Column(name="Parameters", type="text")
-     * @var text
+     * @ORM\OneToMany(targetEntity="Newscoop\Entity\Snippet\SnippetField", mappedBy="snippet", cascade={"persist"})
+     * @ORM\JoinColumn(name="FieldId", referencedColumnName="Id")
+     * @var Newscoop\Entity\Snippet\SnippetField
      */
-    protected $parameters;
+    protected $fields;
 
     /**
-     * @ORM\Column(name="Snippet", type="text")
-     * @var text
+     * @ORM\OneToMany(targetEntity="Newscoop\Entity\Article", mappedBy="snippets")
+     * @var Newscoop\Entity\Article
      */
-    protected $snippet;
+    protected $articles;
+
+    /**
+     * Constructs the Snippet
+     *
+     * @param SnippetTemplate $template SnippetTemplate to set for this Snippet
+     */
+    public function __construct(SnippetTemplate $template)
+    {
+        if (!$template->hasFields()) {
+            throw new \Exception('SnippetTemplate should have fields');
+        }
+        $this->fields = new ArrayCollection();
+        $this->articles = new ArrayCollection();
+        $this->setTemplate($template);
+    }
 
     /**
      * Getter for id
@@ -77,7 +97,7 @@ class Snippet
     /**
      * Getter for Template
      *
-     * @return Newscoop\Entity\Snippet\Template
+     * @return Newscoop\Entity\Snippet\SnippetTemplate
      */
     public function getTemplate()
     {
@@ -87,15 +107,41 @@ class Snippet
     /**
      * Setter for Template
      *
-     * @param Newscoop\Entity\Snippet\Template $template
+     * @param Newscoop\Entity\Snippet\SnippetTemplate $template
      *
      * @return Newscoop\Entity\Snippet
      */
-    public function setTemplate($template)
+    public function setTemplate(SnippetTemplate $template)
     {
         $this->template = $template;
+
+        foreach ($template->getFields() as $templateField) {
+            $field = new SnippetField();
+            $field->setTemplateField($templateField);
+            $this->addField($field);
+        }
     
         return $this;
+    }
+
+    /**
+     * Returns the Template Name
+     *
+     * @return string template name
+     **/
+    public function getTemplateName()
+    {
+        return $this->template->getName();
+    }
+
+    /**
+     * Returns the Template id
+     *
+     * @return int template id
+     **/
+    public function getTemplateId()
+    {
+        return $this->template->getId();
     }
     
     /**
@@ -123,52 +169,67 @@ class Snippet
     }
 
     /**
-     * Getter for Parameters
+     * Getter for fields
      *
-     * @return string JSON
+     * @return array
      */
-    public function getParameters()
+    public function getFields()
     {
-        return $this->parameters;
+        return $this->fields;
     }
     
     /**
-     * Setter for Parameters
+     * Add Snippet fields
      *
-     * @param string JSON $parameters
+     * @param Newscoop\Entity\Snippet\SnippetField $field SnippetField to add
      *
      * @return Newscoop\Entity\Snippet
      */
-    public function setParameters($parameters)
+    private function addField(SnippetField $field)
     {
-        $this->parameters = $parameters;
+        $this->fields->set($field->getFieldName(), $field);
     
         return $this;
     }
-    
-    
+
     /**
-     * Getter for Snippet
-     *
-     * @return string JSON
-     */
-    public function getSnippet()
-    {
-        return $this->snippet;
-    }
-    
-    /**
-     * Setter for Snippet
-     *
-     * @param string JSON $snippet
+     * Set Snippet Data to the appropriate fields
+     * 
+     * @param string $fieldName the name of the SnippetField
+     * @param string $fieldData the data of the SnippetField
      *
      * @return Newscoop\Entity\Snippet
      */
-    public function setSnippet($snippet)
+    public function setData($fieldName, $fieldData = null)
     {
-        $this->snippet = $snippet;
-    
+        if ($this->fields->containsKey($fieldName)) {
+            $this->fields->get($fieldName)->setData($fieldData);
+        } else {
+            throw new \Exception('Snippet: "'.$this->name.'" does not have Field: "'.$fieldName.'"');
+        }
+
         return $this;
     }
     
+    /**
+     * Renders the Snippet with the Data into the Template
+     *
+     * @return string rendered Snippet
+     */
+    public function render()
+    {
+        $twig = new \Twig_Environment(new \Twig_Loader_String());
+        $fieldsToRender = array();
+
+        foreach ($this->fields as $field) {
+            $fieldsToRender[$field->getFieldName()] = $field->getData();   
+        }
+
+        $rendered = $twig->render(
+            $this->getTemplate()->getTemplateCode(),
+            $fieldsToRender
+        );
+
+        return $rendered;
+    }
 }
