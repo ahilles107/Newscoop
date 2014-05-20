@@ -1,0 +1,179 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+{% trans_default_domain "feedback" %}
+
+{% block admin_title %}{{ 'Feedback Messages'|trans }}{% endblock %}
+{% block admin_page_title_box %}
+<div class="toolbar row">
+    <span class="article-title">{{ 'Feedback Messages'|trans }}</span>
+</div>
+{% endblock %}
+
+{% block admin_stylesheets %}
+<link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscoopnewscoop/css/bootstrap.css">
+<link rel="stylesheet" href="{{ asset('/admin-style/action_buttons.css') }}">
+<link rel="stylesheet" href="{{ asset('/admin-style/comments.css') }}">
+<link rel="stylesheet" href="{{ asset('/bundles/newscoopnewscoop/css/jquery.dynatable.css') }}">
+<style type="text/css">
+    #feedbacks-table {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    #feedbacks-table th {
+        background: #007fb3;
+        color: #fff;
+    }
+</style>
+{% endblock %}
+
+{% block admin_scripts %}
+<script src="{{ asset('/bundles/newscoopnewscoop/js/jquery.dynatable.js') }}"></script>
+<script src="{{ asset('/js/jquery/feedback.js') }}"></script>
+{% endblock %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-12">
+    {% for key, message in app.session.flashbag.get('error') %}
+        <script type="text/javascript">
+            flashMessage('{{ message|raw }}', 'error', true);
+        </script>
+    {% endfor %}
+
+    {% for key, message in app.session.flashbag.get('success') %}
+        <script type="text/javascript">
+            flashMessage('{{ message|raw }}');
+        </script>
+    {% endfor %}
+
+    <table id="feedbacks-table" class="table table-bordered table-hover table-striped" style="word-wrap: break-word;table-layout: fixed;">
+        <thead>
+          <tr>
+            <th data-dynatable-column="user" style="width:260px">{{ 'table.user'|trans }}</th>
+            <th data-dynatable-column="date">{{ 'table.date'|trans }}</th>
+            <th data-dynatable-column="subject">{{ 'table.subject'|trans }}</th>
+            <th data-dynatable-column="message">{{ 'table.message'|trans }}</th>
+            <th  data-dynatable-column="publication">{{ 'table.publication'|trans }}</th>
+            <th  data-dynatable-column="section">{{ 'table.section'|trans }}</th>
+            <th  data-dynatable-column="article">{{ 'table.article'|trans }}</th>
+            <th  data-dynatable-column="url">{{ 'table.url'|trans }}</th>
+            <th style="width: 220px;">{{ 'table.actions'|trans }}</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    </div>
+
+    <script type="text/javascript">
+    var dynatable = $('#feedbacks-table')
+        .dynatable({
+            inputs: {
+                paginationClass: 'pagination',
+                paginationActiveClass: 'current',
+                paginationDisabledClass: 'unavailable',
+                paginationPrev: '&laquo;',
+                paginationNext: '&raquo;',
+                pageText: '{{ 'table_messages.page'|trans({},'messages') }}',
+                perPageText: '{{ 'table_messages.perPageText'|trans({},'messages') }}',
+                pageText: '{{ 'table_messages.pageText'|trans({},'messages') }}',
+                recordCountPageBoundTemplate: '{{ 'table_messages.recordCountPageBoundTemplate'|trans({},'messages') }}',
+                recordCountPageUnboundedTemplate: '{{ 'table_messages.recordCountPageUnboundedTemplate'|trans({},'messages') }}',
+                recordCountFilteredTemplate: '{{ 'table_messages.recordCountFilteredTemplate'|trans({},'messages') }}',
+                recordCountText: '{{ 'table_messages.recordCountText'|trans({},'messages') }}',
+                processingText: '{{ 'table_messages.processingText'|trans({},'messages') }}'
+            },
+            dataset: {
+                ajax: true,
+                ajaxUrl: Routing.generate('newscoop_newscoop_feedback_loadfeedbacks'),
+                ajaxOnLoad: true,
+                records: [],
+                perPageDefault: 10,
+                perPageOptions: [10,20,50,100],
+            },
+            features: {
+                paginate: true,
+            },
+            writers: {
+            _cellWriter: function (column, record) {
+                if (column.id == 'user') {
+                    if (typeof record.user === 'object') {
+                        column.attributeWriter = function(record) {
+
+
+                            var user = record.user;
+
+                            return "<div class=\""+ (user.is_baned == true ? "user-blocked-avatar\" " : "") +" pull-left\" style=\"margin-right:10px\"> \
+                                        <img width=50 height=50 src=/images/"+ user.image +"> \
+                                    </div> \
+                                    <div class=\"pull-right\" style=\"width:180px\"> \
+                                        <p style=\"margin-bottom:0px\" "+ (user.is_baned == true ? " class=\"user-blocked-avatar\" " : "") +"> \
+                                            <a target=\"_blank\" href=\""+ user.user_url +"\"><b>"+ user.username +"</b></a> \
+                                        </p> \
+                                        <p style=\"margin-bottom:0px\">"+user.name+"</p> \
+                                        <p style=\"margin-bottom:0px\"><a href=\"mailto:"+ user.email +"\">"+ user.email +"</a></p> \
+                                    </div> \
+                                    <p> \
+                                        <a href=\""+user.banurl+"\" class=\"banUser\"> \
+                                            <span>{{ 'banunbanuser'|trans }}</span> \
+                                        </a> \
+                                    </p> \
+                                    ";
+                        }
+                    } else {
+                        column.attributeWriter = function(record) {
+                            return record.user;
+                        }
+                    }
+                }
+
+                if (column.id == 'date') {
+                    column.attributeWriter = function(record) {
+                        return record.date.date;
+                    }
+                }
+
+                if (column.id == 'actions') {
+                    column.attributeWriter = function(record) {
+                        return "<div class=\"pull-left actions\" style=\"margin:0px; text-align: center\"> \
+                                    <form action=\"{{ path('newscoop_newscoop_feedback_update') }}\" method=\"post\"> \
+                                    <label>{{ 'actions_form.choose_action'|trans }}: </label> \
+                                    <select data-feedback-id=\""+record.id+"\"> \
+                                      <option "+(record.status == 'pending' ? "selected=\"true\" " : "")+" name=\"feedback_actions[new]\" value=\"new\" value=\"new\">{{ 'actions_form.new'|trans }}</option> \
+                                      <option "+(record.status == 'processed' ? "selected=\"true\" " : "")+" name=\"feedback_actions[processed]\" value=\"processed\">{{ 'actions_form.processed'|trans }}</option> \
+                                      <option "+(record.status == 'starred' ? "selected=\"true\" " : "")+" name=\"feedback_actions[starred]\" value=\"starred\">{{ 'actions_form.starred'|trans }}</option> \
+                                    </select> \
+                                    </form> \
+                                    <button data-feedback-id=\""+record.id+"\" type=\"button\" class=\"btn btn-sm btn-success action-reply-feedback\">{{ 'actions_form.buttons.reply'|trans }}</button> \
+                                    <button data-feedback-id=\""+record.id+"\" type=\"button\" class=\"btn btn-sm btn-danger action-remove-feedback\">{{ 'actions_form.buttons.remove'|trans }}</button> \
+                                </div> \
+                                ";
+                    }
+                }
+
+                var html = column.attributeWriter(record),
+                    td = '<td';
+
+                if (column.hidden || column.textAlign) {
+                  td += ' style="';
+                  // keep cells for hidden column headers hidden
+                  if (column.hidden) {
+                    td += 'display: none;';
+                  }
+                  // keep cells aligned as their column headers are aligned
+                  if (column.textAlign) {
+                    td += 'text-align: ' + column.textAlign + ';';
+                  }
+                  td += '"';
+                }
+                if (column.cssClass) {
+                  td += ' class="' + column.cssClass + '"';
+                }
+
+                return td + '>' + html + '</td>';
+            }
+        }
+        });
+    </script>
+</div>
+{% endblock %}

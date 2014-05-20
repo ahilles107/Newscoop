@@ -45,34 +45,39 @@ class FeedbackRepository extends DatatableSource
         // get the entity manager
         $em = $this->getEntityManager();
         if (array_key_exists('user', $values)) {
-			$entity->setUser($values['user']);
-		}
+            $entity->setUser($values['user']);
+        }
 
         if (!empty($values['publication'])) {
-			$publication = $em->getReference('Newscoop\Entity\Publication', $values['publication']);
-			$entity->setPublication($publication);
-		}
-		if (!empty($values['section'])) {
-			$section = $em->getReference('Newscoop\Entity\Section', $values['section']);
-			$entity->setSection($section);
-		}
-		if (!empty($values['language']) && !empty($values['article'])) {
-			$article = $em->getReference('Newscoop\Entity\Article', array(
-				'language' => $values['language'],
-				'number' => $values['article']
-			));
-			$entity->setArticle($article);
-		}
+            $publication = $em->getReference('Newscoop\Entity\Publication', $values['publication']);
+            $entity->setPublication($publication);
+        }
+        if (!empty($values['section'])) {
+            $section = $em->getReference('Newscoop\Entity\Section', $values['section']);
+            $entity->setSection($section);
+        }
+        if (!empty($values['language']) && !empty($values['article'])) {
+            $article = $em->getReference('Newscoop\Entity\Article', array(
+                'language' => $values['language'],
+                'number' => $values['article']
+            ));
+            $entity->setArticle($article);
+        }
 
         if (isset($values['subject'])) $entity->setSubject($values['subject']);
-		if (isset($values['message'])) $entity->setMessage($values['message']);
+        if (isset($values['message'])) $entity->setMessage($values['message']);
         if (isset($values['url'])) $entity->setUrl($values['url']);
         if (isset($values['time_created'])) $entity->setTimeCreated($values['time_created']);
-        if (isset($values['status'])) $entity->setStatus($values['status']);
+        if (isset($values['status'])){
+            $entity->setStatus($values['status']);
+        } else {
+            $entity->setStatus('pending');
+        };
         if (isset($values['attachment_type'])) $entity->setAttachmentType($values['attachment_type']);
         if (isset($values['attachment_id'])) $entity->setAttachmentId($values['attachment_id']);
-        
+
         $em->persist($entity);
+
         return $entity;
     }
 
@@ -106,6 +111,13 @@ class FeedbackRepository extends DatatableSource
             $feedback->setStatus($status);
             $em->persist($feedback);
         }
+    }
+
+    public function getAllFeedbacks()
+    {
+        $qb = $this->createQueryBuilder('f');
+
+        return $qb->getQuery();
     }
 
     /**
@@ -204,8 +216,8 @@ class FeedbackRepository extends DatatableSource
                     }
                     break;
                 case 'attachmentType':
-					$mapper = array_flip(Feedback::$attachment_type_enum);
-					foreach ($values as $value) {
+                    $mapper = array_flip(Feedback::$attachment_type_enum);
+                    foreach ($values as $value) {
                         $orx->add($qb->expr()->eq('e.attachment_type', $mapper[$value]));
                     }
             }
@@ -215,9 +227,9 @@ class FeedbackRepository extends DatatableSource
     }
     
     public function getByUser($p_user_id) {
-		$em = $this->getEntityManager();
-		$qb = $em->createQueryBuilder();
-		$qb->add('select', 'f.id')
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->add('select', 'f.id')
             ->add('from', 'Newscoop\Entity\Feedback f')
             ->add('where', 'f.user = :p_user_id')
             ->setParameter('p_user_id', $p_user_id);
@@ -226,10 +238,10 @@ class FeedbackRepository extends DatatableSource
         
         $clearFeedbackIds = array();
         foreach($feedbackIds as $key => $value) {
-        	$clearFeedbackIds[] = $value['id'];
+            $clearFeedbackIds[] = $value['id'];
         }
         return $clearFeedbackIds;
-	}
+    }
 
     /**
      * Flush method

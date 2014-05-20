@@ -80,6 +80,7 @@ class Admin_FeedbackController extends Zend_Controller_Action
 
         $index = 1;
         $acceptanceRepository = $this->_helper->entity->getRepository('Newscoop\Entity\Comment\Acceptance');
+        //ladybug_dump_die($this->feedbackRepository);
         $table->setHandle(function($feedback) use ($view, &$index, $acceptanceRepository)
             {
                 $user = $feedback->getUser();
@@ -125,13 +126,6 @@ class Admin_FeedbackController extends Zend_Controller_Action
                     $attachment['approve_url'] = $view->url(array('action' => 'approve', 'type' => 'document', 'format' => 'json', 'id' => $attachment['id']));
                 }
 
-                $banned = $acceptanceRepository->checkBanned(array('name' => $user->getName(), 'email' => '', 'ip' => ''), $publication);
-                if ($banned['name'] == true) {
-                    $banned = true;
-                } else {
-                    $banned = false;
-                }
-
                 $zendRouter = \Zend_Registry::get('container')->getService('zend_router');
                 $userUrl = $zendRouter->assemble(array_merge(array(
                     'module' => 'default',
@@ -139,22 +133,8 @@ class Admin_FeedbackController extends Zend_Controller_Action
                     'action' => 'profile',
                 )), 'default', true);
 
-                return array(
+                $result = array(
                     'id' => $index++,
-                    'user' => array(
-                        'username' => strip_tags($user->getUsername()),
-                        'userUrl' => $userUrl.'/'.strip_tags($user->getUsername()),
-                        'name' => $user->getFirstName(),
-                        'email' => $user->getEmail(),
-                        'avatar' => (string)$view->getAvatar($user->getEmail(), array('img_size' => 50, 'default_img' => 'wavatar')),
-                        'banurl' => $view->url(array(
-                            'controller' => 'user',
-                            'action' => 'toggle-ban',
-                            'user' => $user->getId(),
-                            'publication' => $publication->getId()
-                        )),
-                        'is_banned' => $banned,
-                    ),
                     'message' => array(
                         'id' => $feedback->getId(),
                         'created' => array(
@@ -181,6 +161,32 @@ class Admin_FeedbackController extends Zend_Controller_Action
                     ),
                     'attachment' => $attachment
                 );
+                
+                if ($user) {
+                    $banned = $acceptanceRepository->checkBanned(array('name' => $user->getName(), 'email' => '', 'ip' => ''), $publication);
+                    if ($banned['name'] == true) {
+                        $banned = true;
+                    } else {
+                        $banned = false;
+                    }
+
+                    $result['user'] = array(
+                        'username' => strip_tags($user->getUsername()),
+                        'userUrl' => $userUrl.'/'.strip_tags($user->getUsername()),
+                        'name' => $user->getFirstName(),
+                        'email' => $user->getEmail(),
+                        'avatar' => (string)$view->getAvatar($user->getEmail(), array('img_size' => 50, 'default_img' => 'wavatar')),
+                        'banurl' => $view->url(array(
+                            'controller' => 'user',
+                            'action' => 'toggle-ban',
+                            'user' => $user->getId(),
+                            'publication' => $publication->getId()
+                        )),
+                        'is_banned' => $banned,
+                    );
+                };
+
+                return $result;
             });
 
         $table->setOption('fnDrawCallback', 'datatableCallback.draw')

@@ -18,12 +18,14 @@ class PublicResourcesListener
     protected $em;
     protected $serverService;
     protected $security;
+    protected $publicationService;
 
-    public function __construct($em, $serverService, $security)
+    public function __construct($em, $serverService, $security, $publicationService)
     {
         $this->em = $em;
         $this->serverService = $serverService;
         $this->security = $security;
+        $this->publicationService = $publicationService;
     }
 
     public function onRequest(GetResponseEvent $event)
@@ -38,6 +40,10 @@ class PublicResourcesListener
             'newscoop_gimme_users_register',
             'newscoop_gimme_users_restorepassword'
         );
+
+        if ($this->publicationService->getPublication()->getPublicCommentsEnabled()) {
+            $rootsArray[] = 'newscoop_gimme_comments_createcomment';
+        }
 
         if (in_array($route, $rootsArray)) {
             $unprotected = true;
