@@ -9,12 +9,19 @@ table:
     url: 'Url'
     actions: 'Actions'
 banunbanuser: 'Ban/Unban user'
+attachment: 'Attachment'
 
 actions_form:
     new: 'New'
     processed: 'Processed'
     starred: 'Starred'
     choose_action: 'Choose action'
+    confirm_remove: 'Are you sure you want to remove this feedback message?'
     buttons:
         reply: 'Reply'
         remove: 'Remove'
+
+reply_form:
+    subject: 'Reply subject'
+    message: 'Reply message'
+    success_message: 'Message was send.'

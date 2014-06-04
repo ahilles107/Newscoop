@@ -73,6 +73,7 @@ class FeedbackRepository extends DatatableSource
         } else {
             $entity->setStatus('pending');
         };
+
         if (isset($values['attachment_type'])) $entity->setAttachmentType($values['attachment_type']);
         if (isset($values['attachment_id'])) $entity->setAttachmentId($values['attachment_id']);
 
@@ -102,7 +103,7 @@ class FeedbackRepository extends DatatableSource
      * @param  string $status
      * @return void
      */
-    private function setFeedbackStatus(Feedback $feedback, $status)
+    public function setFeedbackStatus(Feedback $feedback, $status)
     {
         $em = $this->getEntityManager();
         if ($status == 'deleted') {
@@ -113,9 +114,63 @@ class FeedbackRepository extends DatatableSource
         }
     }
 
-    public function getAllFeedbacks()
+    public function getOneFeedback($id)
     {
         $qb = $this->createQueryBuilder('f');
+        $qb->andWhere('f.id = :id');
+        $qb->setParameter('id', $id);
+
+        return $qb->getQuery();
+    }
+
+    public function getAllFeedbacks($order = array(), $search = null, $filters = null)
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb->leftJoin('f.user', 'u');
+        $andx = $qb->expr()->andx();
+
+        if ($search) {
+            $orx = $qb->expr()->orx();
+            $orx->add($qb->expr()->like('u.username', $qb->expr()->literal("%{$search}%")));
+            $orx->add($qb->expr()->like('f.subject', $qb->expr()->literal("%{$search}%")));
+            $orx->add($qb->expr()->like('f.message', $qb->expr()->literal("%{$search}%")));
+            $andx->add($orx);
+
+            $qb->where($andx);
+        }
+
+        if ($filters) {
+            foreach ($filters as $key => $value) {
+                if ($key == 'status' && is_array($value)) {
+                    $andx = $qb->expr()->andx();
+                    $orx = $qb->expr()->orx();
+                    foreach ($value as $key => $status) {
+                        $orx->add($qb->expr()->eq('f.status', ':status_'.$key));
+                        $qb->setParameter('status_'.$key, $status);
+                    }
+                    $andx->add($orx);
+                    $qb->andWhere($andx);
+                } elseif ($key == 'attachments' && is_array($value)) {
+                    $andx = $qb->expr()->andx();
+                    $orx = $qb->expr()->orx();
+                    foreach ($value as $key => $attachmentType) {
+                        $orx->add($qb->expr()->eq('f.attachment_type', ':attachmentType_'.$key));
+                        $qb->setParameter('attachmentType_'.$key, $attachmentType);
+                    }
+                    $andx->add($orx);
+                    $qb->andWhere($andx);
+                }
+            }
+
+        }
+
+        if (count($order) > 0) {
+            foreach ($order as $key => $value) {
+                $qb->addOrderBy('f.'.$key, $value);
+            }
+        } else {
+            $qb->addOrderBy('f.time_created', 'desc');
+        }
 
         return $qb->getQuery();
     }

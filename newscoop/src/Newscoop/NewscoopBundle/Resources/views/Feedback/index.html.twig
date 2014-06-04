@@ -28,7 +28,6 @@
 
 {% block admin_scripts %}
 <script src="{{ asset('/bundles/newscoopnewscoop/js/jquery.dynatable.js') }}"></script>
-<script src="{{ asset('/js/jquery/feedback.js') }}"></script>
 {% endblock %}
 
 {% block admin_content %}
@@ -46,18 +45,47 @@
         </script>
     {% endfor %}
 
+    <div id="showComments" style="background-color: #fff; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc;">
+        <fieldset>
+            <legend>Pokaż</legend>
+            <ul class="status_filter">
+              <li class="new">
+                <input class="dynatable-query" type="checkbox" id="status|show_new" value="1"> <label for="show_new">Nowy</label>
+              </li>
+              <li class="approved">
+                <input class="dynatable-query" type="checkbox" id="status|show_processed" value="0"> <label for="show_processed">Przetworzony</label>
+              </li>
+              <li class="approved">
+                <input class="dynatable-query" type="checkbox" id="status|show_starred" value="2"> <label for="show_starred">Odznaczony</label>
+              </li>
+            </ul>
+            <br>
+            <ul class="attachment_filter">
+              <li class="none">
+                <input class="dynatable-query" type="checkbox" id="attachments|show_none" value="0"> <label for="show_none">Brak załączników.</label>
+              </li>
+              <li class="image">
+                <input class="dynatable-query" type="checkbox" id="attachments|show_image" value="1"> <label for="show_image">Zdjęcie dostępne w załącznikach</label>
+              </li>
+              <li class="document">
+                <input class="dynatable-query" type="checkbox" id="attachments|show_document" value="2"> <label for="show_document">Dokument dostępny w zalącznikach</label>
+              </li>
+            </ul>
+        </fieldset>
+    </div>
+
     <table id="feedbacks-table" class="table table-bordered table-hover table-striped" style="word-wrap: break-word;table-layout: fixed;">
         <thead>
           <tr>
-            <th data-dynatable-column="user" style="width:260px">{{ 'table.user'|trans }}</th>
-            <th data-dynatable-column="date">{{ 'table.date'|trans }}</th>
+            <th data-dynatable-no-sort="true" data-dynatable-column="user" style="width:260px">{{ 'table.user'|trans }}</th>
+            <th data-dynatable-column="time_created" style="width:80px">{{ 'table.date'|trans }}</th>
             <th data-dynatable-column="subject">{{ 'table.subject'|trans }}</th>
-            <th data-dynatable-column="message">{{ 'table.message'|trans }}</th>
-            <th  data-dynatable-column="publication">{{ 'table.publication'|trans }}</th>
-            <th  data-dynatable-column="section">{{ 'table.section'|trans }}</th>
-            <th  data-dynatable-column="article">{{ 'table.article'|trans }}</th>
-            <th  data-dynatable-column="url">{{ 'table.url'|trans }}</th>
-            <th style="width: 220px;">{{ 'table.actions'|trans }}</th>
+            <th data-dynatable-column="message" style="width:360px">{{ 'table.message'|trans }}</th>
+            <th data-dynatable-no-sort="true" data-dynatable-column="publication">{{ 'table.publication'|trans }}</th>
+            <th data-dynatable-no-sort="true" data-dynatable-column="section">{{ 'table.section'|trans }}</th>
+            <th data-dynatable-no-sort="true" data-dynatable-column="article">{{ 'table.article'|trans }}</th>
+            <th data-dynatable-no-sort="true" data-dynatable-column="url">{{ 'table.url'|trans }}</th>
+            <th data-dynatable-no-sort="true" style="width: 220px;">{{ 'table.actions'|trans }}</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -127,25 +155,50 @@
                     }
                 }
 
-                if (column.id == 'date') {
+                if (column.id == 'time_created') {
                     column.attributeWriter = function(record) {
-                        return record.date.date;
+                        return record.time_created.date;
+                    }
+                }
+
+                if (column.id == 'message') {
+                    column.attributeWriter = function(record) {
+                        var attachment = '';
+                        if ("attachment" in record) {
+                            attachment = "<div style=\"padding: 10px 5px;border: 1px solid #666; margin-top: 5px;\"> \
+                                    {{ 'attachment'|trans({}) }}:<br /> <a href=\""+record.attachment.location+"\">"+record.attachment.name+"</a> \
+                                </div>";
+                        }
+
+                        return "<div>"+record.message+"</div>"
+                                + attachment +
+                                "<div class=\"reply\" style=\"margin:0px; width:340px; display:none;\"> \
+                                    <form action=\"{{ path('newscoop_newscoop_feedback_reply') }}\" method=\"post\"> \
+                                    <label style=\"margin:5px 0px;\">{{ 'reply_form.subject'|trans }}: </label> <br /> \
+                                    <input type=\"text\" name=\"subject\" style=\"padding:3px; width: 250px;\" placeholder=\"Type message subject\" /> <br /> \
+                                    <label style=\"margin:5px 0px;\">{{ 'reply_form.message'|trans }}: </label> <br /> \
+                                    <textarea name=\"message\" style=\"width:340px; height: 150px; padding:3px;\" /></textarea> \
+                                    <input type=\"hidden\" name=\"feedback_id\" value=\""+record.id+"\" /> \
+                                    <input type=\"submit\" value=\"Send\" style=\"margin-top: 10px;\" class=\"btn btn-sm btn-success pull-right js-reply-send\" /> \
+                                    <input type=\"submit\" value=\"Cancel\" style=\"margin-top: 10px; margin-right: 10px;\" class=\"btn btn-sm pull-right js-reply-cancel\" /> \
+                                    </form> \
+                                </div>";
                     }
                 }
 
                 if (column.id == 'actions') {
                     column.attributeWriter = function(record) {
                         return "<div class=\"pull-left actions\" style=\"margin:0px; text-align: center\"> \
-                                    <form action=\"{{ path('newscoop_newscoop_feedback_update') }}\" method=\"post\"> \
+                                    <form action=\"{{ path('newscoop_newscoop_feedback_setstatus') }}\" method=\"post\"> \
                                     <label>{{ 'actions_form.choose_action'|trans }}: </label> \
-                                    <select data-feedback-id=\""+record.id+"\"> \
+                                    <select class=\"change-status\" data-feedback-id=\""+record.id+"\"> \
                                       <option "+(record.status == 'pending' ? "selected=\"true\" " : "")+" name=\"feedback_actions[new]\" value=\"new\" value=\"new\">{{ 'actions_form.new'|trans }}</option> \
                                       <option "+(record.status == 'processed' ? "selected=\"true\" " : "")+" name=\"feedback_actions[processed]\" value=\"processed\">{{ 'actions_form.processed'|trans }}</option> \
                                       <option "+(record.status == 'starred' ? "selected=\"true\" " : "")+" name=\"feedback_actions[starred]\" value=\"starred\">{{ 'actions_form.starred'|trans }}</option> \
                                     </select> \
                                     </form> \
                                     <button data-feedback-id=\""+record.id+"\" type=\"button\" class=\"btn btn-sm btn-success action-reply-feedback\">{{ 'actions_form.buttons.reply'|trans }}</button> \
-                                    <button data-feedback-id=\""+record.id+"\" type=\"button\" class=\"btn btn-sm btn-danger action-remove-feedback\">{{ 'actions_form.buttons.remove'|trans }}</button> \
+                                    <button data-feedback-id=\""+record.id+"\" type=\"button\" class=\"btn btn-sm btn-danger action-remove-feedback\" value=\"deleted\">{{ 'actions_form.buttons.remove'|trans }}</button> \
                                 </div> \
                                 ";
                     }
@@ -173,6 +226,90 @@
                 return td + '>' + html + '</td>';
             }
         }
+        }).data('dynatable');
+
+        $('#feedbacks-table').on('click', '.actions select.change-status', function(el){
+            var that = $(this);
+            callServer('ping', [], function(json) {
+                $.ajax({
+                    type: 'POST',
+                    data: {'status': that.val(), 'feedback': that.data('feedbackId')},
+                    url: Routing.generate('newscoop_newscoop_feedback_setstatus'),
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (rq, status, error) {
+                        if (status == 0 || status == -1) {
+                            flashMessage(error.message, "error");
+                        }
+                    }
+                });
+            });
+        });
+
+        $('#feedbacks-table').on('click', '.action-remove-feedback', function(el){
+            var that = $(this);
+            var removeFeedback = confirm("{{ 'actions_form.confirm_remove'|trans }}");
+            if (removeFeedback == true) {
+                callServer('ping', [], function(json) {
+                    $.ajax({
+                        type: 'POST',
+                        data: {'status': that.val(), 'feedback': that.data('feedbackId')},
+                        url: Routing.generate('newscoop_newscoop_feedback_setstatus'),
+                        success: function (data) {
+                            dynatable.process();
+                        },
+                        error: function (rq, status, error) {
+                            if (status == 0 || status == -1) {
+                                flashMessage(error.message, "error");
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        $('#feedbacks-table').on('click', '.js-reply-cancel', function(e){
+            e.preventDefault();
+            $(this).closest('tr').find('.reply').hide();
+        })
+
+        $('#feedbacks-table').on('click', '.action-reply-feedback', function(e){
+            e.preventDefault();
+            $(this).closest('tr').find('.reply').toggle();
+        })
+
+        $('#feedbacks-table').on('submit', '.reply form', function(e){
+            e.preventDefault();
+            var that = $(this);
+            callServer('ping', [], function(json) {
+                $.ajax({
+                    type: 'POST',
+                    data: that.serialize(),
+                    url: Routing.generate('newscoop_newscoop_feedback_reply'),
+                    success: function (data) {
+                        that[0].reset();
+                        that.closest('.reply').hide();
+
+                        flashMessage("{{ 'reply_form.success_message'|trans }}");
+                    },
+                    error: function (rq, status, error) {
+                        if (status == 0 || status == -1) {
+                            flashMessage(error.message, "error");
+                        }
+                    }
+                });
+            });
+        });
+
+        $('#showComments input.dynatable-query').click(function(e){
+            if ($(this).is(':checked')) {
+                dynatable.queries.add($(this).attr('id'), $(this).val());
+            } else {
+                dynatable.queries.remove($(this).attr('id'));
+            }
+
+            dynatable.process();
         });
     </script>
 </div>

@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Newscoop\Entity\Feedback;
 
 class FeedbackController extends Controller
@@ -22,16 +23,62 @@ class FeedbackController extends Controller
      * @Template()
      */
     public function indexAction(Request $request)
+    {}
+
+    /**
+     * @Route("/admin/feedbacks/setstatus", options={"expose"=true})
+     * @Template()
+     */
+    public function setStatusAction(Request $request)
     {
+        $em = $this->get('em');
+        $status = $request->request->get('status');
+        $feedback = $request->request->get('feedback');
+
+        try {
+            $feedbackRepository = $em->getRepository('Newscoop\Entity\Feedback');
+            $feedback = $feedbackRepository->find($feedback);
+            $feedbackRepository->setFeedbackStatus($feedback, $status);
+            $em->flush();
+        } catch (Exception $e) {
+            return new JsonResponse(array(
+                'status' => $e->getCode(),
+                'message' => $e->getMessage()
+            ));
+        }
+
+        return new JsonResponse(array(
+            'status' => 200,
+            'message' => 'succcesful'
+        ));
     }
 
     /**
-     * @Route("/admin/feedbacks/update")
-     * @Template()
+     * @Route("/admin/feedbacks/reply", options={"expose"=true})
      */
-    public function updateAction(Request $request)
+    public function replyAction(Request $request)
     {
-        ladybug_dump_die($request->request);
+        $em = $this->get('em');
+        $emailService = $this->container->get('email');
+        $feedbackRepository = $em->getRepository('Newscoop\Entity\Feedback');
+
+        $fromEmail = $this->getUser()->getEmail();
+        $feedbackId = $request->request->get('feedback_id');
+        $subject = $request->request->get('subject');
+        $message = $request->request->get('message');
+        $feedback = $feedbackRepository->find($feedbackId);
+        $toEmail = $feedback->getUser()->getEmail();
+
+        try {
+            $emailService->send($subject, $message, $fromEmail, $toEmail);
+        } catch (\Exception $e) {
+            return new JsonResponse(array(
+                'status' => $e->getCode(),
+                'message' => $e->getMessage()
+            ));
+        }
+
+        return new JsonResponse(array('status' => 200, 'message' => 'succcesful'));
     }
 
     /**
@@ -41,11 +88,34 @@ class FeedbackController extends Controller
     {
         $em = $this->get('em');
         $paginator = $this->get('knp_paginator');
+        $queries = $request->query->get('queries', array('search' => ''));
+        $order = $request->query->get('sorts', array());
+
+        foreach ($order as $key => $value) {
+            if ($value == 1) {
+                $order[$key] = 'asc';
+            } else {
+                $order[$key] = 'desc';
+            }
+        }
+
+        $filters = array();
+        foreach ($queries as $key => $value) {
+            $filterName = explode('|', $key);
+
+            if (count($filterName) > 1) {
+                $filters[$filterName[0]][] = $value;
+            }
+        }
 
         $allFeedbacks = $em->getRepository('Newscoop\Entity\Feedback')
-            ->getAllFeedbacks();
+            ->getAllFeedbacks($order, $queries['search'], $filters);
 
-        $allFeedbacks = $paginator->paginate($allFeedbacks, 1, 20);
+        $allFeedbacks = $paginator->paginate(
+            $allFeedbacks,
+            $request->query->get('page', 1),
+            $request->query->get('perPage', 10)
+        );
 
         $processedData = array();
         foreach ($allFeedbacks as $feedback) {
@@ -54,8 +124,8 @@ class FeedbackController extends Controller
 
         return new Response(json_encode(array(
             'records' => $processedData,
-            'queryRecordCount' => 1,
-            'totalRecordCount'=> 1
+            'queryRecordCount' => $allFeedbacks->getTotalItemCount(),
+            'totalRecordCount'=> count($allFeedbacks->getItems())
         )));
     }
 
@@ -67,7 +137,7 @@ class FeedbackController extends Controller
 
         $data = array(
             'id' => $feedback->getId(),
-            'date' => $feedback->getTimeCreated(),
+            'time_created' => $feedback->getTimeCreated(),
             'message' => $feedback->getMessage(),
             'subject' => $feedback->getSubject(),
             'publication' => $feedback->getPublication()->getName(),
@@ -87,6 +157,23 @@ class FeedbackController extends Controller
             $data['article'] = $feedback->getArticle()->getName();
         } else {
             $data['article'] = $translator->trans("empty");
+        }
+
+        if ($feedback->getAttachmentId()) {
+            $attachment = $em->getRepository('Newscoop\Entity\Attachment')
+                ->getAttachment($feedback->getAttachmentId())
+                ->getOneOrNullResult();
+
+            if ($attachment) {
+                $attachmentService = $this->container->get('attachment');
+                $data['attachment'] = array(
+                    'name' => $attachment->getName(),
+                    'type' => $feedback->getAttachmentType(),
+                    'description' => $attachment->getDescription()->getTranslationText(),
+                    'status' => $attachment->getStatus(),
+                    'location' => $attachmentService->getAttachmentUrl($attachment).'?g_show_in_browser=true'
+                );
+            }
         }
 
         if ($feedback->getUser()) {

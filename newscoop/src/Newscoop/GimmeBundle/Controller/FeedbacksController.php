@@ -27,6 +27,39 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 class FeedbacksController extends FOSRestController
 {
     /**
+     * Get feedback
+     *
+     * @ApiDoc(
+     *     statusCodes={
+     *         200="Returned when successful",
+     *         404={
+     *           "Returned when the feedback is not found"
+     *         }
+     *     }
+     * )
+     *
+     * @Route("/feedbacks/{id}.{_format}", defaults={"_format"="json"})
+     * @Method("GET")
+     * @View(serializerGroups={"details"})
+     *
+     * @return array
+     */
+    public function getFeedbackAction(Request $request, $id)
+    {
+        $em = $this->container->get('em');
+
+        $feedback = $em->getRepository('Newscoop\Entity\Feedback')
+            ->getOneFeedback($id)
+            ->getOneOrNullResult();
+
+        if (!$feedback) {
+            throw new EntityNotFoundException('Result was not found.');
+        }
+
+        return $feedback;
+    }
+
+    /**
      * Get all feedbacks
      *
      * @ApiDoc(
@@ -48,15 +81,15 @@ class FeedbacksController extends FOSRestController
     {
         $em = $this->container->get('em');
 
-        $attachments = $em->getRepository('Newscoop\Entity\Attachment')
-            ->getAttachments();
+        $feedbacks = $em->getRepository('Newscoop\Entity\Feedback')
+            ->getAllFeedbacks();
 
         $paginator = $this->get('newscoop.paginator.paginator_service');
-        $attachments = $paginator->paginate($attachments, array(
+        $feedbacks = $paginator->paginate($feedbacks, array(
             'distinct' => false
         ));
 
-        return $attachments;
+        return $feedbacks;
     }
 
     /**
@@ -85,13 +118,13 @@ class FeedbacksController extends FOSRestController
      *
      * @ApiDoc(
      *     statusCodes={
-     *         204="Returned when attachment removed succesfuly",
+     *         204="Returned when feedback removed succesfuly",
      *         404={
-     *           "Returned when the attachment is not found",
+     *           "Returned when the feedback is not found",
      *         }
      *     },
      *     parameters={
-     *         {"name"="number", "dataType"="integer", "required"=true, "description"="Attachment id"}
+     *         {"name"="number", "dataType"="integer", "required"=true, "description"="Feedback id"}
      *     }
      * )
      *
@@ -103,19 +136,19 @@ class FeedbacksController extends FOSRestController
      */
     public function deleteFeedbackAction(Request $request, $number)
     {
-        $attachmentService = $this->container->get('attachment');
         $em = $this->container->get('em');
-        $attachment = $em->getRepository('Newscoop\Entity\Attachment')->findOneById($number);
-
+        $feedbackRepository = $em->getRepository('Newscoop\Entity\Feedback');
+        $feedback = $feedbackRepository->find($feedback);
         if (!$attachment) {
             throw new EntityNotFoundException('Result was not found.');
         }
 
-        $attachmentService->remove($attachment);
+        $feedbackRepository->setFeedbackStatus($feedback, 'deleted');
+        $em->flush();
     }
 
     /**
-     * Process attachment form
+     * Process feedback form
      *
      * @param Request $request
      *
@@ -135,24 +168,47 @@ class FeedbacksController extends FOSRestController
         if ($form->isValid()) {
             $file = $form['attachment']->getData();
             $attributes = $form->getData();
+            $attachmentAttributes = array();
             $user = $this->getUser();
 
             if ($user) {
                 $attributes['user'] = $user;
+                $attachmentAttributes['user'] = $user;
             }
             $attributes['publication'] = $publicationService->getPublication()->getId();
+            $attributes['attachment_type'] = 'none';
+
+            if ($file) {
+                $attachmentService = $this->container->get('attachment');
+                $attachment = $attachmentService->upload(
+                    $file,
+                    $attributes['subject'],
+                    $publicationService->getPublication()->getLanguage(),
+                    $attachmentAttributes
+                );
+
+                if ($attachment) {
+                    $type = explode('/', $attachment->getMimeType());
+                    if ($type[0] == 'image') {
+                        $attributes['attachment_type'] = 'image';
+                    } else {
+                        $attributes['attachment_type'] = 'document';
+                    }
+
+                    $attributes['attachment_id'] = $attachment->getId();
+                }
+            }
 
             $feedback = $feedbackRepository->save(new Feedback(), $attributes);
             $em->flush();
-            ladybug_dump_die($file, $attributes, $user, $feedback);
 
             $response = new Response();
             $response->setStatusCode($statusCode);
 
             $response->headers->set(
                 'X-Location',
-                $this->generateUrl('newscoop_gimme_attachments_getattachment', array(
-                    'number' => $attachment->getId(),
+                $this->generateUrl('newscoop_gimme_feedbacks_getfeedback', array(
+                    'id' => $feedback->getId(),
                 ), true)
             );
 
