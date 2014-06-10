@@ -68,11 +68,11 @@ class AuthController extends Zend_Controller_Action
         $session = \Zend_Registry::get('container')->getService('session');
 
         $config = array(
-		    'base_url' => $this->view->serverUrl($this->view->url(array('action' => 'socialendpoint'))), 
-		    'debug_mode' => false,
-		    'providers' => array(
-			    'Facebook' => array(
-				    'enabled' => true,
+            'base_url' => $this->view->serverUrl($this->view->url(array('action' => 'socialendpoint'))), 
+            'debug_mode' => false,
+            'providers' => array(
+                'Facebook' => array(
+                    'enabled' => true,
                     'keys'    => array(
                         'id' => $preferencesService->facebook_appid,
                         'secret' => $preferencesService->facebook_appsecret,
@@ -94,7 +94,8 @@ class AuthController extends Zend_Controller_Action
                 $user = $this->_helper->service('user')->findOneBy(array('email' => $userData->email));
 
                 if (!$user) {
-                    $user = $this->_helper->service('user')->createPending($userData->email, $userData->firstName, $userData->lastName);
+                    $publicationService = \Zend_Registry::get('container')->getService('newscoop_newscoop.publication_service');
+                    $user = $this->_helper->service('user')->createPending($userData->email, $userData->firstName, $userData->lastName, null, $publicationService->getPublication()->getId());
                 }
 
                 $this->_helper->service('auth.adapter.social')->addIdentity($user, $adapter->id, $userData->identifier);
@@ -112,6 +113,10 @@ class AuthController extends Zend_Controller_Action
                     'social' => true,
                 ));
             } else {
+                $request = \Zend_Registry::get('container')->getService('request');
+                if ($request->query->has('_target_path')) {
+                    $this->_helper->redirector->gotoUrl($request->query->get('_target_path'));
+                }
                 $this->_helper->redirector('index', 'dashboard');
             }
         } catch (\Exception $e) {
@@ -153,7 +158,7 @@ class AuthController extends Zend_Controller_Action
     }
 
     public function passwordRestoreFinishAction()
-    {   
+    {
         $translator = Zend_Registry::get('container')->getService('translator');
         $user = $this->_helper->service('user')->find($this->_getParam('user'));
         if (empty($user)) {
@@ -182,7 +187,7 @@ class AuthController extends Zend_Controller_Action
         if ($request->isPost() && $form->isValid($request->getPost())) {
             $this->_helper->service('user')->save($form->getValues(), $user);
             $this->_helper->service('user.token')->invalidateTokens($user, 'password.restore');
-            if (!$this->auth->hasIdentity()) { // log in
+            if (!$this->auth->hasIdentity()) {
                 $adapter = $this->_helper->service('auth.adapter');
                 $adapter->setEmail($user->getEmail())->setPassword($form->password->getValue());
                 $this->auth->authenticate($adapter);

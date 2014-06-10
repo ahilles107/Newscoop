@@ -18,7 +18,7 @@ class ShortURL
     {
         $publicationService = \Zend_Registry::get('container')->getService('newscoop.publication_service');
 
-        if ($publicationService->getPublication()->getId() == $publicationId) {
+        if ($publicationService->getPublication() && $publicationService->getPublication()->getId() == $publicationId) {
             $publication = $publicationService->getPublication();
         } else {
             $em = \Zend_Registry::get('container')->getService('em');
