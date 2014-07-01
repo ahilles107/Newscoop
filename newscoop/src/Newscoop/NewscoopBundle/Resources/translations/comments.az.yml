@@ -1,0 +1,100 @@
+'No attachment': null
+at: null
+'With no attachment': null
+'With image attachment': null
+'With document attachment': null
+'Unable to reach Newscoop. Please check your internet connection.': 'Newscoop-a keçmək mümkün deyil. Lütfən, internet bağlantını yoxla.'
+Starred: null
+Star: null
+'Showing _START_ to _END_ of _TOTAL_ entries': null
+'Reply to message': null
+Reply: null
+Processed: null
+'No records found.': null
+'No entries to show': null
+'Messages updated.': null
+'Messages status change to $1.': null
+'Messages deleted.': null
+'Message updated.': null
+'Message status change to $1.': null
+'Message deleted.': null
+Message: null
+Last: Son
+'Full article': null
+First: İlk
+'Feedback Messages': null
+'Display _MENU_ records': null
+Deleted: null
+'Change selected messages status': null
+Attachment: null
+Approved.: null
+Approve: null
+Anonymous: null
+' - filtering from _MAX_ records': null
+'You are about to permanently delete multiple messages.': null
+'You are about to permanently delete a message.': null
+User: null
+None: 'Heç biri'
+'Coming from': null
+'Ban/Unban user': null
+Ip: null
+'Bans can be applied to a users name, email address or IP address.': null
+'You are about to permanently delete multiple comments.': null
+'You are about to permanently delete a comment.': null
+Website: null
+'Value is not $1 characters long': null
+Username: 'İstifadəçi adı'
+'User id': 'İstifadəçi Id-si'
+'User ban settings': 'İstifadəçi kilid parametrləri'
+'Update comment': 'Şərhi yenilə'
+Unrecommended: 'Tövsiyyə Edilmədi'
+Unrecommend: 'Tövsiyyə Etmə'
+'Subject is not $1 characters long': 'Başlıq $1 uzunluqda işarədən ibarət deyil'
+'Sort by Thread order': 'Keçid sıralaması ilə yerləşdir'
+'Show parent comment': 'Mənbə şərhi göstər'
+'Show commenter details': 'Şərh edənin məlumatlarını göstər'
+'Show commenter': null
+'Show comment user details': null
+'Show comment user': null
+'Show comment details': null
+'Select status': null
+'Search Type': null
+'Reply to comment': 'Şərhə cavab yaz'
+Recommended: 'Tövsiyyə Olunur'
+Recommend: 'Tövsiyyə Et'
+'Quick edit': null
+Parent: null
+ID: null
+'Go to edit article': null
+Forum: null
+'For Column': 'Sütun Üçün'
+Email: Email
+'Edit acceptance criteria': 'Qəbul kriteriyasını dəyiş'
+E-mail: E-mail
+'Delete all comments?': 'Şərhlərin hamısını silirsən?'
+'Date Created': 'Məlumat Yaradıldı'
+'Comments updated.': 'Şərhlər yeniləndi.'
+'Comments status change to $1.': 'Şərhlərin statusunu $1 olaraq təyin et.'
+'Comments deleted.': 'Şərhlər silindi.'
+'Commenter $1 saved.': '$1 şərh sahibi saxlandı.'
+'Commenter $1 deleted.': '$1 şərh sahibi silindi.'
+Commenter: 'Şərh sahibi'
+'Comment updated.': 'Şərh yeniləndi.'
+'Comment status change to $1.': 'Şərh statusu $1 olaraq təyin edilir.'
+'Comment id': 'Şərh Id-si'
+'Comment deleted.': 'Şərh silindi.'
+'Comment delete by $1 from the article $2 ($3)': 'Şərh $2 ($3) məqaləsindən $1 tərəfindən silindi'
+'Comment Acceptance': 'Şərhin Qəbulu'
+'Comment $4 by $1 in the article $2 ($3)': '$2 ($3) məqaləsində $1 tərəfindən $4 şərhi'
+'Comment $1 saved.': '$1 şərhi saxlandı.'
+Column: Sütun
+'Change subscriber information': 'Abunə məlumatını dəyiş'
+'Ban for commenter $1 saved.': '$1 şərhçisi üçün kilid saxlandı.'
+Ban: Kilid
+'Are you sure you want to do it?': 'Bunu etmək istədiyinə əminsən?'
+'Add rating': 'Qiymət əlavə et'
+'Add new comment commenter': 'Yeni şərhçi əlavə et'
+'Add new comment': 'Yeni şəth əlavə et'
+'Add new acceptance criteria': 'Yeni qəbul kriteriyası əlavə et'
+'Acceptance $1 saved.': '$1 təhvili saxlandı.'
+'Acceptance $1 deleted.': '$1 təhvili silindi.'

@@ -1,0 +1,81 @@
+get: null
+Soundcloud: SoundCloud
+Templates: Skabeloner
+'Feedback Messages': 'Feedback beskeder'
+'Article Playlists': null
+'Check all': 'Vælg alle'
+view: se
+undo/redo: null
+underline: understreget
+translate: oversæt
+'text direction': 'tekst retning'
+'text alignment': 'tekst justering'
+table: tabel
+superscript: hævet
+subscript: sænket
+subhead: underoverskrift
+strikethrough: gennemstreget
+statusbar: statusbar
+'spell checker enabled': 'stavekontrol slået til'
+'source view': 'se kilde'
+publish: udgiv
+notify: null
+moderate: null
+manage: administrer
+'list number': null
+'list bullet': null
+link: link
+italic: kursiv
+indent: indryk
+image: billede
+'horizontal rule': 'vandret linje'
+handle: null
+guest: gæst
+'font size': skriftstørrelse
+'font face': skrifttype
+'font color': skriftfarve
+find/replace: søg/erstat
+enlarge: forstør
+enable: 'slå til'
+edit: rediger
+delete: slet
+copy/cut/paste: 'kopier/klip/sæt ind'
+clear: ryd
+'character map': null
+bold: fed
+attach: vedhæft
+'any resource': null
+admin: admin
+add: tilføj
+'You cant deny yourself to manage $1': null
+'You are not allowed to $1 $2.': null
+'User type saved.': null
+'User type deleted.': null
+'User type added.': null
+'User Groups': 'Bruger grupper'
+Themes: Temaer
+'That type name already exists, please choose a different name.': null
+System: System
+Structure: Struktur
+'Search Indexer': 'Søge indexer'
+'Rich-Text Editor Preferences': null
+ReCaptcha: ReCaptcha
+Polls: Afstemninger
+'Permissions:': 'Tilladelser:'
+'Permissions updated': 'Tilladelser opdateret'
+Notification: Besked
+Log: Log
+Layout: Layout
+Global: Global
+Files: Filer
+'Error: ': 'Fejl:'
+'Edit user type $1': 'Rediger brugertype $1'
+Deny: null
+'Delete user type $1': 'Slet brugertype $1'
+'Can not delete a user type with assigned users.': null
+Cache: Cache
+Backup: Backup
+Authoring: null
+Allow: Tillad
+'User types': Brugertyper
+'No user types.': 'Ingen brugertyper.'

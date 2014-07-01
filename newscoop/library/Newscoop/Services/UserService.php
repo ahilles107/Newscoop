@@ -9,13 +9,13 @@ namespace Newscoop\Services;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Newscoop\Entity\User;
-use Newscoop\Entity\UserAttribute;
 use Newscoop\PaginatedCollection;
 use InvalidArgumentException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * User service
@@ -72,7 +72,7 @@ class UserService
             } elseif ($this->security->getToken()) {
                 if ($this->security->getToken()->getUser()) {
                     $currentUser = $this->security->getToken()->getUser();
-                    if( $this->security->isGranted('IS_AUTHENTICATED_FULLY') ){
+                    if ( $this->security->isGranted('IS_AUTHENTICATED_FULLY') ) {
                         $this->currentUser = $currentUser;
                     } else {
                         $this->currentUser = null;
@@ -465,12 +465,12 @@ class UserService
      * Log in user
      *
      * @param Newscoop\Entity\User $user
+     * @param string               $providerKey
      *
-     * @return void
+     * @return UsernamePasswordToken
      */
-    public function loginUser(User $user)
+    public function loginUser(User $user, $providerKey)
     {
-        $providerKey = 'frontend_area';
         $roles = $user->getRoles();
         $token = new UsernamePasswordToken($user, null, $providerKey, $roles);
         $this->security->setToken($token);
@@ -523,5 +523,32 @@ class UserService
         $this->setUserIp($userIp);
 
         return $userIp;
+    }
+
+    /**
+     * Update user points
+     *
+     * @param  GenericEvent $event
+     * @return void
+     */
+    public function updateUserPoints(GenericEvent $event)
+    {
+        $params = $event->getArguments();
+        $user = null;
+        $authorId = null;
+        if (array_key_exists('user', $params)) {
+            $user = $params['user'];
+            if (is_numeric($params['user'])) {
+                $user = $this->find($params['user']);
+            }
+        }
+
+        if (array_key_exists('authorId', $params)) {
+            $authorId = $params['authorId'];
+        }
+
+        if ($user || $authorId) {
+            $this->getRepository()->setUserPoints($user, $authorId);
+        }
     }
 }

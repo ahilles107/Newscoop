@@ -1,0 +1,66 @@
+comments:
+    label:
+        comments: null
+        menu: null
+        banned: null
+        anonymous: null
+        at: null
+        noentries: null
+        showing: null
+        of: null
+        to: null
+        entries: null
+        fullarticle: null
+        hidden: null
+        approved: null
+        new: null
+        editarticle: null
+        section: null
+        comment: null
+        replyto: null
+        subject: null
+        ban: null
+        author: null
+        date: null
+        article: null
+        search: null
+        show: null
+        recommended: null
+        unrecommended: null
+        editcomment: null
+        actions: null
+        selectstatus: null
+        deleted: Silindi
+        alert: Xəbərdarlıq
+        searchholder: 'Axtar... (məsələn, ad, email, başlıq, şərh, məqalə adı)'
+    btn:
+        cancel: 'Ləğv et'
+        submit: Göndər
+        unrecommend: 'Tövsiyyə Etmə'
+        recommend: 'Tövsiyyə Et'
+        delete: Sil
+        reply: 'Cavab yaz'
+        edit: null
+        close: null
+        okay: null
+        filter: null
+    msg:
+        deleted: 'Şərh silindi.'
+        commentinarticle: '$2 ($3) məqaləsində $1 tərəfindən $4 şərhi'
+        status:
+            new: yeni
+            approved: təsdiqləndi
+            hidden: gizli
+            single: 'Şərh statusu belə dəyişdi'
+            all: 'Şərhlərin statusu belə dəyişdi'
+        error:
+            reach: 'Newscoop-a keçmək mümkün deyil. Lütfən, internet bağlantını yoxla.'
+            deletefromarticle: 'Şərh $2 ($3) məqaləsindən $1 tərəfindən silindi'
+            statuschange: null
+            delete: null
+            update: null
+        sure: null
+        suremultiple: null
+        first: null
+        surequestion: null
+        updated: null

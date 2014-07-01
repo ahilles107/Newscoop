@@ -35,6 +35,48 @@ class AuthorService
     }
 
     /**
+     * Get authors
+     *
+     * @param  string $term      Search term
+     * @param  int    $limit     Max results
+     * @param  bool   $alsoUsers Also return users
+     *
+     * @return array
+     */
+    public function getAuthors($term = null, $limit = null, $alsoUsers = false)
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->select("trim(concat(aa.first_name, concat(' ', aa.last_name))) as name")
+            ->from('Newscoop\Entity\Author', 'aa');
+
+        if ($term !== null && trim($term) !== '') {
+            $qb
+            ->where($qb->expr()->like('aa.last_name', ':term'))
+            ->orWhere($qb->expr()->like('aa.first_name', ':term'))
+            ->orWhere($qb->expr()->like('concat(aa.first_name, concat(\' \', aa.last_name))', ':term'))
+            ->setParameter('term', $term . '%')
+            ->groupBy('aa.last_name', 'aa.first_name');
+        }
+
+        if (!is_null($limit)) {
+            $qb->setMaxResults($limit);
+        }
+
+        $authorsArray = $qb->getQuery()->getArrayResult();
+
+        if ($alsoUsers) {
+            $qbUsers = clone $qb;
+            $qbUsers->resetDQLPart('from');
+            $qbUsers->from('Newscoop\Entity\User', 'aa');
+            $usersArray = $qbUsers->getQuery()->getArrayResult();
+            $authorsArray = array_merge($authorsArray, $usersArray);
+        }
+
+        return $authorsArray;
+    }
+
+    /**
      * Get author options
      *
      * @return array
@@ -106,5 +148,53 @@ class AuthorService
 
         $this->em->remove($articleAuthor);
         $this->em->flush();
+
+        $articleAuthors = $this->em->getRepository('Newscoop\Entity\ArticleAuthor')
+            ->getArticleAuthors($article->getNumber(), $article->getLanguageCode())
+            ->getResult();
+
+        $this->reorderAuthors($this->em, $articleAuthors);
+    }
+
+    /**
+     * Reorder Article Authors
+     *
+     * @param Doctrine\ORM\EntityManager $em
+     * @param array                      $articleAuthors
+     * @param array                      $order
+     *
+     * @return boolean
+     */
+    public function reorderAuthors($em, $articleAuthors, $order = array())
+    {
+        // clear current order
+        foreach ($articleAuthors as $articleAuthor) {
+            $articleAuthor->setOrder(null);
+        }
+        $em->flush();
+
+        if (count($order) > 1) {
+            $counter = 0;
+            foreach ($order as $item) {
+                list($authorId, $authorTypeId) = explode("-", $item);
+
+                foreach ($articleAuthors as $articleAuthor) {
+                    if ($articleAuthor->getAuthor()->getId() == $authorId && $articleAuthor->getType()->getId() == $authorTypeId) {
+                        $articleAuthor->setOrder($counter+1);
+                        $counter++;
+                    }
+                }
+            }
+        } else {
+            $counter = 1;
+            foreach ($articleAuthors as $articleAuthor) {
+                $articleAuthor->setOrder($counter);
+                $counter++;
+            }
+        }
+
+        $em->flush();
+
+        return true;
     }
 }
