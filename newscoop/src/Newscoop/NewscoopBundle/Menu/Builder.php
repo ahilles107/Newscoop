@@ -203,9 +203,7 @@ class Builder
             $menu,
             $translator->trans('Feedback', array(), 'home'),
             array(
-                'uri' => $this->container->get('router')->generate('newscoop_newscoop_feedback_index'),
-                'resource' => 'feedback',
-                'privilege' => 'manage'
+                'uri' => $this->container->get('router')->generate('newscoop_newscoop_feedback_index')
             )
         );
 

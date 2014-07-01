@@ -19,14 +19,14 @@ use Newscoop\Entity\Feedback;
 class FeedbackController extends Controller
 {
     /**
-     * @Route("/admin/feedbacks")
+     * @Route("/admin/feedback")
      * @Template()
      */
     public function indexAction(Request $request)
     {}
 
     /**
-     * @Route("/admin/feedbacks/setstatus", options={"expose"=true})
+     * @Route("/admin/feedback/setstatus", options={"expose"=true})
      * @Template()
      */
     public function setStatusAction(Request $request)
@@ -54,7 +54,7 @@ class FeedbackController extends Controller
     }
 
     /**
-     * @Route("/admin/feedbacks/reply", options={"expose"=true})
+     * @Route("/admin/feedback/reply", options={"expose"=true})
      */
     public function replyAction(Request $request)
     {
@@ -82,7 +82,7 @@ class FeedbackController extends Controller
     }
 
     /**
-     * @Route("/admin/feedbacks/load", options={"expose"=true})
+     * @Route("/admin/feedback/load", options={"expose"=true})
      */
     public function loadFeedbacksAction(Request $request)
     {
