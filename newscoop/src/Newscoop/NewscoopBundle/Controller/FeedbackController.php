@@ -181,7 +181,8 @@ class FeedbackController extends Controller
 
             $banned = $acceptanceRepository->checkBanned(array(
                 'name' => $feedback->getUser()->getName(),
-                'email' => '', 'ip' => ''
+                'email' => '',
+                'ip' => ''
             ), $publication);
 
             if ($banned['name'] == true) {
