@@ -301,7 +301,8 @@ class Rendition
      */
     private function getFlags()
     {
-        $specs = array_shift(explode('_', $this->getSpecs(), 2));
+        $specs = explode('_', $this->getSpecs(), 2);
+        $specs = array_shift($specs);
         switch ($specs) {
             case 'fill':
             case 'crop':
