@@ -31,7 +31,8 @@
                         <span title="{{ 'editorial.btn.delete'|trans }}" class="glyphicon glyphicon-remove"></span>
                 </button>
                 <button type="button" ng-click="isEditing(this)" ng-show="hover" ng-class="{'active': editing}" class="btn btn-default btn-xs resolve-btn alignment-btn"><span title="{{ 'editorial.btn.edit'|trans }}" class="glyphicon glyphicon-pencil"></span></button>
-                <div class="commenter-container" ng-click="showReplyBox(this)">
+                <button type="button" ng-click="showReplyBox(this)" ng-show="hover && !comment.parent" ng-class="{'active': isReplying}" class="btn btn-default btn-xs resolve-btn alignment-btn"><span title="{{ 'editorial.btn.reply'|trans }}" class="glyphicon glyphicon-share-alt"></span></button>
+                <div class="commenter-container">
                   <figure class="notification-avatar">
                       <img ng-if="comment.user.image" ng-src="{[{ comment.user.image }]}">
                   </figure>
@@ -59,16 +60,18 @@
                         </div>
                     </div>
                     </form>
-                    <div ng-if="!comment.parent" ng-class="{'typing-active': isReplying}">
-                        <div class="notification-write-box" ng-if="isReplying && !editing">
-                            <textarea ng-model="textareaReply.comment" class="notification-writer" ng-click="isReplying = true" placeholder="{{ 'editorial.label.reply'|trans }}"></textarea>
-                            <div class="alert alert-danger" ng-show="addForm.comment.$error.maxlength" role="alert">{{ 'editorial.alert.toolong'|trans }}</div>
+                <form name="replyForm" class="form-inline" role="form" novalidate ng-if="isReplying && !comment.parent">
+                  <div class="typing-active">
+                        <div class="notification-write-box">
+                            <textarea ng-model="textareaReply.comment" name="comment" required ng-minlength="1" ng-maxlength="160" placeholder="{{ 'editorial.label.reply'|trans }}" class="notification-writer" placeholder="{{ 'editorial.label.reply'|trans }}"></textarea>
+                            <div class="alert alert-danger" ng-show="replyForm.comment.$error.maxlength" role="alert">{{ 'editorial.alert.toolong'|trans }}</div>
                             <div class="button-area clearfix pull-right">
-                                <button class="btn btn-primary btn-xs send-notif" ng-click="addComment(comment.id)">{{ 'editorial.btn.send'|trans }}</button>
-                                <button class="btn btn-default btn-xs cancel-notif" ng-click="hide(this); $parent.isReplying = false">{{ 'editorial.btn.cancel'|trans }}</button>
+                                <button class="btn btn-primary btn-xs send-notif" ng-disabled="replyForm.$invalid" ng-click="addComment(comment.id)">{{ 'editorial.btn.send'|trans }}</button>
+                                <button class="btn btn-default btn-xs cancel-notif" ng-click="hide(this)">{{ 'editorial.btn.cancel'|trans }}</button>
                             </div>
                         </div>
                     </div>
+                    </form>
                 </li>
               </ul>
             </div>

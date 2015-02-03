@@ -112,6 +112,7 @@ editorial:
         save: "Save"
         edit: "Edit"
         delete: "Delete"
+        reply: "Reply"
     label:
         post: "Post a new comment"
         reply: "Reply..."

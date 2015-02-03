@@ -182,18 +182,15 @@ app.controller('EditorialCommentsCtrl', [
     };
 
     /**
-     * Removes comment from the array of not solved comments
+     * Removes comment and its children from the array of not solved comments
      *
      * @param  {array}   comments Array of comments
      * @param  {integer} id       comment id
-     * @return {boolean}
      */
-    var removeCommentFromArray = function (comments, id) {
+    var removeCommentWithChildrenFromArray = function (comments, id) {
         for (var i = 0; i < comments.length; i++) {
-            if (comments[i].id == id) {
+            if (comments[i].id == id || (comments[i].parent && comments[i].parent.id == id)) {
                 comments.splice(comments.indexOf(comments[i]), 1);
-
-                return true;
             }
         }
     };
@@ -253,7 +250,7 @@ app.controller('EditorialCommentsCtrl', [
 
       	comments.update(postData, commentId).success(function (data) {
 	        flashMessage(Translator.trans('editorial.alert.resolved', {}, 'comments'));
-	        removeCommentFromArray($scope.comments.items, commentId);
+	        removeCommentWithChildrenFromArray($scope.comments.items, commentId);
 	    }).error(function(data, status){
 	        flashMessage(data.errors[0].message, 'error');
 	    });
@@ -289,7 +286,7 @@ app.controller('EditorialCommentsCtrl', [
     $scope.deleteComment = function(commentId) {
       comments.delete(commentId).success(function (data) {
 	        flashMessage(Translator.trans('editorial.alert.deleted', {}, 'comments'));
-	        removeCommentFromArray($scope.comments.items, commentId);
+	        removeCommentWithChildrenFromArray($scope.comments.items, commentId);
 	    }).error(function(data, status){
 	        flashMessage(data.errors[0].message, 'error');
 	    });
