@@ -20,15 +20,6 @@ app.factory('Comments', function($http, $activityIndicator) {
 	    this.articleLanguage = null;
 	};
 
-	// get user access token only once
-	$http.get(Routing.generate("newscoop_gimme_users_getuseraccesstoken", {
-            clientId: clientId
-    })).success(function(data, status, headers, config) {
-		$http.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
-	}).error(function(data, status, headers, config) {
-		flashMessage(data.errors[0].message, 'error');
-	});
-
 	Comments.prototype.getOne = function(url) {
         return $http({
             method: "GET",
@@ -114,20 +105,27 @@ app.factory('Comments', function($http, $activityIndicator) {
 	    this.busy = true;
 
 	    var url = Routing.generate("newscoop_gimme_articles_get_editorial_comments", {
-            language: this.articleLanguage,
-            number: this.articleNumber,
-            order: 'nested'
-        });
+		    language: articleLanguage,
+		    number: articleNumber,
+		    order: 'nested'
+		});
 
-		$http.get(url).success(function (data) {
-		    var items = data.items;
-		    if (data.pagination !== undefined) {
-		     this.itemsCount = data.pagination.itemsCount;
-		    }
-
-		    this.items = items;
-		    this.busy = false;
-		}.bind(this));
+	    if (!$http.defaults.headers.common.Authorization) {
+		    $http.get(Routing.generate("newscoop_gimme_users_getuseraccesstoken", {
+	            clientId: clientId
+		    })).success(function(data, status, headers, config) {
+				$http.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
+		  		$http.get(url).success(function (data) {
+				    this.items = data.items;
+				    this.busy = false;
+				}.bind(this));
+			}.bind(this));
+		} else {
+		  	$http.get(url).success(function (data) {
+				this.items = data.items;
+				this.busy = false;
+			}.bind(this));
+		}
   	};
 
   	return Comments;
@@ -156,6 +154,7 @@ app.controller('EditorialCommentsCtrl', [
 
 	var comments = new Comments();
 	$scope.comments = comments;
+
 	$interval(function(){
 		comments.refresh();
     }.bind(this), 20000);
