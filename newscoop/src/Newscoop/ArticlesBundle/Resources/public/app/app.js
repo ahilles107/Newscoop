@@ -20,15 +20,6 @@ app.factory('Comments', function($http, $activityIndicator) {
 	    this.articleLanguage = null;
 	};
 
-	// get user access token only once
-	$http.get(Routing.generate("newscoop_gimme_users_getuseraccesstoken", {
-            clientId: clientId
-    })).success(function(data, status, headers, config) {
-		$http.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
-	}).error(function(data, status, headers, config) {
-		flashMessage(data.errors[0].message, 'error');
-	});
-
 	Comments.prototype.getOne = function(url) {
         return $http({
             method: "GET",
@@ -114,20 +105,27 @@ app.factory('Comments', function($http, $activityIndicator) {
 	    this.busy = true;
 
 	    var url = Routing.generate("newscoop_gimme_articles_get_editorial_comments", {
-            language: this.articleLanguage,
-            number: this.articleNumber,
-            order: 'nested'
-        });
+		    language: articleLanguage,
+		    number: articleNumber,
+		    order: 'nested'
+		});
 
-		$http.get(url).success(function (data) {
-		    var items = data.items;
-		    if (data.pagination !== undefined) {
-		     this.itemsCount = data.pagination.itemsCount;
-		    }
-
-		    this.items = items;
-		    this.busy = false;
-		}.bind(this));
+	    if (!$http.defaults.headers.common.Authorization) {
+		    $http.get(Routing.generate("newscoop_gimme_users_getuseraccesstoken", {
+	            clientId: clientId
+		    })).success(function(data, status, headers, config) {
+				$http.defaults.headers.common.Authorization = 'Bearer ' + data.access_token;
+		  		$http.get(url).success(function (data) {
+				    this.items = data.items;
+				    this.busy = false;
+				}.bind(this));
+			}.bind(this));
+		} else {
+		  	$http.get(url).success(function (data) {
+				this.items = data.items;
+				this.busy = false;
+			}.bind(this));
+		}
   	};
 
   	return Comments;
@@ -156,6 +154,7 @@ app.controller('EditorialCommentsCtrl', [
 
 	var comments = new Comments();
 	$scope.comments = comments;
+
 	$interval(function(){
 		comments.refresh();
     }.bind(this), 20000);
@@ -230,8 +229,8 @@ app.controller('EditorialCommentsCtrl', [
      * @parent scope {object} currently selected element in a tree
      */
     $scope.hide = function(scope) {
-      scope.$parent.editing = false;
-      scope.$parent.isReplying = false;
+      scope.editing = false;
+      scope.isReplying = false;
     };
 
     /**
@@ -272,9 +271,11 @@ app.controller('EditorialCommentsCtrl', [
 
       comments.update(postData, comment.id).success(function (data) {
 	        flashMessage(Translator.trans('editorial.alert.edited', {}, 'comments'));
+			comment.editing = false;
 	    }).error(function(data, status){
 	        flashMessage(data.errors[0].message, 'error');
 	    });
+
     };
 
     /**
@@ -299,9 +300,9 @@ app.controller('EditorialCommentsCtrl', [
      * Resolves editorial comment
      *
      * @method addComment
-     * @param commentId {integer} comment's id
+     * @param comment {integer} comment
      */
-    $scope.addComment = function(commentId) {
+    $scope.addComment = function(comment) {
         var addFormData = {
             editorial_comment: {},
             _csrf_token: token
@@ -309,9 +310,9 @@ app.controller('EditorialCommentsCtrl', [
 
         addFormData.editorial_comment["comment"] = $scope.textareaMessage.comment;
 
-        if (commentId && $scope.textareaReply.comment) {
+        if (comment.id && $scope.textareaReply.comment) {
         	addFormData.editorial_comment["comment"] = $scope.textareaReply.comment;
-        	addFormData.editorial_comment["parent"] = commentId;
+        	addFormData.editorial_comment["parent"] = comment.id;
         }
 
       	comments.create(addFormData).success(function (data, code, headers) {
@@ -324,6 +325,7 @@ app.controller('EditorialCommentsCtrl', [
 	        	flashMessage(Translator.trans('editorial.alert.added', {}, 'comments'));
 	        	$scope.textareaMessage = {};
 	        	$scope.textareaReply = {};
+	        	comment.isReplying = false;
 	        }).error(function(data, status){
 		        flashMessage(data.errors[0].message, 'error');
 		    });
