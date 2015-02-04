@@ -85,6 +85,18 @@ if ($can_save) {
         && isset($_FILES['file']['name'])
         && !empty($_FILES['file']['name']);
 
+    if ($uploadFileSpecified) {
+        $attributes = array();
+        $image = Image::OnImageUpload($_FILES['file'], $attributes);
+        if (PEAR::isError($image)) {
+            camp_html_add_msg($image->getMessage());
+        } else {
+            $author->setImage($image->getImageId());
+        }
+    } else if (empty($author->getImage())) {
+        $author->setImage(null);
+    }
+
     $author->setFirstName($first_name);
     $author->setLastName($last_name);
     $author->commit();
@@ -107,15 +119,6 @@ if ($can_save) {
     $authorBiography['first_name'] = Input::Get("lang_first_name");
     $authorBiography['last_name'] = Input::Get("lang_last_name");
     $author->setBiography($authorBiography);
-    if ($uploadFileSpecified) {
-        $attributes = array();
-        $image = Image::OnImageUpload($_FILES['file'], $attributes);
-        if (PEAR::isError($image)) {
-            camp_html_add_msg($image->getMessage());
-        } else {
-            $author->setImage($image->getImageId());
-        }
-    }
 
     $aliases = Input::Get("alias", "array");
     if (!empty($aliases)) {

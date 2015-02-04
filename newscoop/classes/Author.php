@@ -187,7 +187,7 @@ class Author extends DatabaseObject
      */
     public function getImage()
     {
-        return (int) $this->m_data['image'];
+        return $this->m_data['image'];
     }
 
     public function getAuthorType()
@@ -329,7 +329,7 @@ class Author extends DatabaseObject
      */
     public function setImage($p_value)
     {
-        return $this->setProperty('image', (int) $p_value);
+        return $this->setProperty('image', $p_value);
     }
 
     /**

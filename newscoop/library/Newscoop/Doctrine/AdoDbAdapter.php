@@ -112,7 +112,13 @@ class AdoDbAdapter
             throw new InvalidArgumentException("'key' param invalid.");
         }
 
-        return sprintf('%s = %s', $this->escapeIdentifier($key), $this->escape($val));
+        if ($val !== null) {
+            $val = $this->escape($val);
+        } else {
+            $val = "NULL";
+        }
+
+        return sprintf('%s = %s', $this->escapeIdentifier($key), $val);
     }
 
     /**
