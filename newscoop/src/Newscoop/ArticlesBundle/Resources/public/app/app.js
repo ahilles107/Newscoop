@@ -230,8 +230,8 @@ app.controller('EditorialCommentsCtrl', [
      * @parent scope {object} currently selected element in a tree
      */
     $scope.hide = function(scope) {
-      scope.$parent.editing = false;
-      scope.$parent.isReplying = false;
+      scope.editing = false;
+      scope.isReplying = false;
     };
 
     /**
@@ -272,9 +272,11 @@ app.controller('EditorialCommentsCtrl', [
 
       comments.update(postData, comment.id).success(function (data) {
 	        flashMessage(Translator.trans('editorial.alert.edited', {}, 'comments'));
+			comment.editing = false;
 	    }).error(function(data, status){
 	        flashMessage(data.errors[0].message, 'error');
 	    });
+
     };
 
     /**
@@ -299,9 +301,9 @@ app.controller('EditorialCommentsCtrl', [
      * Resolves editorial comment
      *
      * @method addComment
-     * @param commentId {integer} comment's id
+     * @param comment {integer} comment
      */
-    $scope.addComment = function(commentId) {
+    $scope.addComment = function(comment) {
         var addFormData = {
             editorial_comment: {},
             _csrf_token: token
@@ -309,9 +311,9 @@ app.controller('EditorialCommentsCtrl', [
 
         addFormData.editorial_comment["comment"] = $scope.textareaMessage.comment;
 
-        if (commentId && $scope.textareaReply.comment) {
+        if (comment.id && $scope.textareaReply.comment) {
         	addFormData.editorial_comment["comment"] = $scope.textareaReply.comment;
-        	addFormData.editorial_comment["parent"] = commentId;
+        	addFormData.editorial_comment["parent"] = comment.id;
         }
 
       	comments.create(addFormData).success(function (data, code, headers) {
@@ -324,6 +326,7 @@ app.controller('EditorialCommentsCtrl', [
 	        	flashMessage(Translator.trans('editorial.alert.added', {}, 'comments'));
 	        	$scope.textareaMessage = {};
 	        	$scope.textareaReply = {};
+	        	comment.isReplying = false;
 	        }).error(function(data, status){
 		        flashMessage(data.errors[0].message, 'error');
 		    });
