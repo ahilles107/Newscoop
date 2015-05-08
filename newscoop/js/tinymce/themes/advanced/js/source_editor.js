@@ -12,8 +12,9 @@ function onLoadInit() {
 	// Remove Gecko spellchecking
 	if (tinymce.isGecko)
 		document.body.spellcheck = tinyMCEPopup.editor.getParam("gecko_spellcheck");
-
-	document.getElementById('htmlSource').value = tinyMCEPopup.editor.getContent({source_view : true});
+		window.onload = function() {
+			document.getElementById('htmlSource').value = tinyMCEPopup.editor.getContent({source_view : true});
+		};
 
 	if (tinyMCEPopup.editor.getParam("theme_advanced_source_editor_wrap", true)) {
 		setWrap('soft');
