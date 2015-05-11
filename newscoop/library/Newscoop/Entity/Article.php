@@ -288,7 +288,7 @@ class Article implements DocumentInterface
     protected $translations;
 
     /**
-     * @ORM\OneToOne(targetEntity="Newscoop\Entity\Webcode")
+     * @ORM\OneToOne(targetEntity="Newscoop\Entity\Webcode", cascade={"persist"})
      * @ORM\JoinColumn(name="webcode", referencedColumnName="webcode")
      * @var Newscoop\Entity\Webcode
      */
