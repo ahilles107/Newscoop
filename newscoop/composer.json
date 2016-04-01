@@ -52,7 +52,7 @@
         "symfony\/twig-bridge":"~2.5",
         "newscoop\/recaptcha-bundle":"2.2",
         "friendsofsymfony\/oauth-server-bundle":"1.4.0",
-        "newscoop\/plugins-installer":"v0.2",
+        "newscoop\/plugins-installer":"~v0.2",
         "nelmio\/api-doc-bundle":"2.8.0",
         "hellogerard\/jobby":"v2.0.12",
         "dflydev\/doctrine-orm-service-provider":"1.0.4",
