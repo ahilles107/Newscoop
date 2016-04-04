@@ -10,7 +10,7 @@
     "version": "4.4.7",
     "license":"GPL-3.0",
     "authors":[
-        
+
     ],
     "repositories":[
         {
@@ -24,6 +24,7 @@
         "silex\/silex":"1.2.*@dev",
         "doctrine\/orm":"2.4.6",
         "doctrine\/common":"2.4.1",
+        "doctrine\/cache": "~1.5",
         "doctrine\/doctrine-bundle":"1.2.*",
         "twig\/extensions":"1.1.*",
         "symfony\/assetic-bundle":"2.4.*",
