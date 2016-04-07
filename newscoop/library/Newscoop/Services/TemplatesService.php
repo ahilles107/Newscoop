@@ -145,7 +145,8 @@ class TemplatesService
         $uri = \CampSite::GetURIInstance();
         $this->smarty->campsiteVector = $this->originalVector + $uri->getCampsiteVector();
         $publicationMetadata = $this->publicationService->getPublicationMetadata();
-        if (count($publicationMetadata) > 0) {
+
+        if (isset($publicationMetadata['alias']) && isset($publicationMetadata['publication'])) {
             $this->smarty->campsiteVector = $this->smarty->campsiteVector + array(
                 'publication' => $publicationMetadata['alias']['publication_id'],
                 'language' => $publicationMetadata['publication']['id_default_language']
