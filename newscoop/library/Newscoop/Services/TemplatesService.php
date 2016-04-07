@@ -52,7 +52,7 @@ class TemplatesService
      * @param string  $file     template file path
      * @param array   $params   array with template parameters
      * @param integer $lifetime template cache lifetime (default: 1400 seconds)
-     * 
+     *
      * @return string Template output
      */
     public function fetchTemplate($file, $params = array(), $lifetime = 1400)
@@ -70,7 +70,7 @@ class TemplatesService
      * @param array   $params   array with template parameters
      * @param integer $lifetime template cache lifetime (default: 1400 seconds)
      * @param boolean $render   render or just fetch template (default: true [render])
-     * 
+     *
      * @return string Template output
      */
     public function renderTemplate($file, $params = array(), $lifetime = 1400, $render = true)
@@ -93,18 +93,18 @@ class TemplatesService
 
     /**
      *  Newscoop caching save cached template file content with special vector parameters.
-     *  
+     *
      *  By default vector is filled with 6 parameters:
      *  * (int) language
      *  * (int) publication
      *  * (int) issue
      *  * (int) section
-     *  * (int) article 
+     *  * (int) article
      *  * (string) params
      *
      *  In this service vector is allways prefilled only with publication and language values.
      *  You need to set manualny (if needed) issue, section, article or params keys
-     *  
+     *
      * @param array $vector
      */
     public function setVector($vector)
@@ -142,12 +142,14 @@ class TemplatesService
 
     private function preconfigureVector()
     {
+        $uri = \CampSite::GetURIInstance();
+        $this->smarty->campsiteVector = $this->originalVector + $uri->getCampsiteVector();
         $publicationMetadata = $this->publicationService->getPublicationMetadata();
         if (count($publicationMetadata) > 0) {
-            $this->smarty->campsiteVector = array_merge($this->originalVector, array(
+            $this->smarty->campsiteVector = $this->smarty->campsiteVector + array(
                 'publication' => $publicationMetadata['alias']['publication_id'],
                 'language' => $publicationMetadata['publication']['id_default_language']
-            ));
+            );
         }
     }
 }
