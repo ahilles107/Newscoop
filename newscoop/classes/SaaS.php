@@ -42,8 +42,8 @@ class SaaS
      */
     public function hasPermission($p_permissionString)
     {
-        if (array_key_exists('permissions', $this->saasConfig)) {
-            $permissions = $this->saasConfig['permissions'];
+        if (array_key_exists('permissions', self::$saasConfig)) {
+            $permissions = self::$saasConfig['permissions'];
         } else {
             $permissions = array();
         }
