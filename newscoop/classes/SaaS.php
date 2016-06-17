@@ -73,7 +73,7 @@ class SaaS
 
         $hasPrivilege = TRUE;
         if (array_key_exists('privileges', self::$saasConfig)) {
-            $privileges = $this->saasConfig['privileges'];
+            $privileges = self::$saasConfig['privileges'];
         } else {
             $privileges = array();
         }
@@ -102,7 +102,7 @@ class SaaS
     {
         $returnArray = array();
         if (array_key_exists('privileges', $this->saasConfig)) {
-            $privileges = $this->saasConfig['privileges'];
+            $privileges = self::$saasConfig['privileges'];
         } else {
             $privileges = array();
         }
