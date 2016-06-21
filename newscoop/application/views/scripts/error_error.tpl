@@ -1,11 +1,15 @@
 {{extends file="layout.tpl"}}
+{{block nav}}{{/block}}
+{{block header}}{{/block}}
+{{block footer}}{{/block}}
 
-{{block content}}
-{{ dynamic }}
+{{block title}}Error page{{/block}}
+
+{{block content nocache}}
 <div class="span error-page">
 <h1>Hey, this is error!</h1>
 
-<h2>Error: {{ $message }}</h2>
+<h2>{{ $message }}</h2>
 
 {{ if isset($exception) }}
     <h3>Exception information</h3>
@@ -21,10 +25,6 @@
 
     <h3>Stack trace</h3>
     <pre>{{ $exception->getTraceAsString() }}</pre>
-
-    <h3>Request Parameters</h3>
-    <pre>{{ ladybug_dump($request) }}</pre>
 {{ /if }}
 </div>
-{{ /dynamic }}
 {{/block}}

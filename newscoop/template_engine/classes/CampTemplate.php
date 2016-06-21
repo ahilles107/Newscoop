@@ -233,14 +233,7 @@ final class CampTemplate extends SmartyBC
      */
     public function trigger_error($p_message, $p_smarty = null)
     {
-        if (!self::singleton()->m_preview) {
-            return;
-        }
+        throw new \Newscoop\NewscoopException("Newscoop error: $p_message");
 
-        if (is_object($p_smarty)) {
-            $p_smarty->trigger_error($p_message);
-        } else {
-            trigger_error("Newscoop error: $p_message");
-        }
     }
 }

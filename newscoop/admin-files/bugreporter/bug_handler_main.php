@@ -39,16 +39,6 @@ function camp_bug_handler_main($p_number, $p_string, $p_file, $p_line)
         return;
     }
 
-    // throw exception instead of raising error
-    // TODO: we should catch those exceptions on BridgeController
-/*    if (defined('APPLICATION_ENV') && APPLICATION_ENV == 'development') {
-        require_once __DIR__ . '/../../library/Newscoop/Utils/Exception.php';
-        $exception = new \Newscoop\Utils\Exception($p_string, $p_number);
-        $exception->setFile($p_file);
-        $exception->setLine($p_line);
-        throw $exception;
-    }*/
-
     // -- Return on generic errors ---
     if (preg_match ('/^Undefined index:/i', $p_string)){
         return;
@@ -142,8 +132,7 @@ function camp_bug_handler_main($p_number, $p_string, $p_file, $p_line)
     $version = array_shift($version);
 
     if (!isset($reporter)) {
-        $reporter = new BugReporter($p_number, $p_string, $p_file, $p_line,
-                                    'Newscoop', $version);
+        $reporter = new BugReporter($p_number, $p_string, $p_file, $p_line, 'Newscoop', $version);
     }
 
     // --- Print results ---

@@ -321,7 +321,6 @@ final class CampHTMLDocument
         try {
             $tpl->display($template);
         } catch (\Exception $e) {
-            // log samrty errors to sentry channel
             $logger = \Zend_Registry::get('container')->get('monolog.logger.sentry');
             $logger->log(\Psr\Log\LogLevel::CRITICAL, 'Uncaught exception', array(
                 'message' => $e->getMessage(),

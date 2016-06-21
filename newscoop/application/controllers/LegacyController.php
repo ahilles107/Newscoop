@@ -28,7 +28,7 @@ class LegacyController extends Zend_Controller_Action
     {
         global $controller;
         $controller = $this;
-	
+
         require_once($GLOBALS['g_campsiteDir'].DIRECTORY_SEPARATOR.'include'.DIRECTORY_SEPARATOR.'campsite_constants.php');
         require_once(CS_PATH_CONFIG.DIR_SEP.'install_conf.php');
 
@@ -51,10 +51,6 @@ class LegacyController extends Zend_Controller_Action
 
         // dispatches campsite
         $campsite->dispatch();
-
-        if (APPLICATION_ENV !== 'development' || APPLICATION_ENV !== 'dev') {
-            set_error_handler(create_function('', 'return true;'));
-        }
 
         // renders the site
         $campsite->render();

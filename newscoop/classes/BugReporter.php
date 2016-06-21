@@ -83,7 +83,12 @@ class BugReporter
         $this->m_str = $p_string;
         $this->m_file = $p_file;
         $this->m_line = (int) $p_line;
-        $this->m_backtrace = $this->__convertBacktraceArrayToString($backtrace);
+
+        // show backtrace only in development mode
+        if (APPLICATION_ENV == 'development' || APPLICATION_ENV == 'dev') {
+            $this->m_backtrace = $this->__convertBacktraceArrayToString($backtrace);
+        }
+
         $this->m_time = $p_time;
     } // fn BugReporter
 

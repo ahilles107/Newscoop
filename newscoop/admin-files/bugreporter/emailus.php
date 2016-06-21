@@ -85,6 +85,7 @@ if (isset($sendWasAttempted) && $sendWasAttempted) {
     <td nowrap><?php echo $translator->trans("Time:"); ?></td>
     <td><?php echo $reporter->getTime(); ?></td>
 </tr>
+<?php if ($reporter->getBacktraceString()) { ?>
 <tr align="left">
     <td valign="top" nowrap><?php echo $translator->trans("Backtrace:", array(), 'bug_reporting'); ?></td>
     <td>
@@ -93,4 +94,5 @@ if (isset($sendWasAttempted) && $sendWasAttempted) {
 </pre>
     </td>
 </tr>
+<?php } ?>
 </table>

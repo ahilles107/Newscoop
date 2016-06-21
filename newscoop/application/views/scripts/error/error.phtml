@@ -25,11 +25,5 @@
   <h3><?php echo $translator->trans('Stack trace:', array(), 'bug_reporting'); ?></h3>
   <pre><?php echo $this->exception->getTraceAsString() ?>
   </pre>
-
-  <h3><?php echo $translator->trans('Request Parameters:', array(), 'bug_reporting'); ?></h3>
-  <pre><?php echo var_export($this->request->getParams(), true) ?>
-  </pre>
-  <?php endif ?>
-
 </body>
 </html>

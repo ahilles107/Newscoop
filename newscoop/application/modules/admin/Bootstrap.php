@@ -46,6 +46,10 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
         if (php_sapi_name() !== 'cli') {
             set_error_handler(function ($p_number, $p_string, $p_file, $p_line) {
                 error_log(sprintf('Newscoop error: %s in %s:%d', $p_string, $p_file, $p_line));
+                $logger = \Zend_Registry::get('container')->get('monolog.logger.sentry');
+                $logger->log(\Psr\Log\LogLevel::CRITICAL, 'Uncaught exception', array(
+                    'message' => $p_string
+                ));
 
                 global $Campsite;
                 require_once $Campsite['HTML_DIR'] . "/admin-files/bugreporter/bug_handler_main.php";

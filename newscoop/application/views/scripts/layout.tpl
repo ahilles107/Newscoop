@@ -19,6 +19,7 @@
 <body>
     <div class="header">
         {{block header}}Newscoop{{/block}}
+        {{block nav}}
         <div class="nav">
             <ul>
                 <li><a href="{{ $view->url(['controller' => 'index', 'action' => 'index'], 'default') }}">Home</a></li>
@@ -27,6 +28,7 @@
                 <li><a href="{{ $view->url(['controller' => 'auth', 'action' => 'index'], 'default') }}">Sign in</a></li>
             </ul>
         </div>
+        {{/block}}
     </div>
 
     <div class="content">

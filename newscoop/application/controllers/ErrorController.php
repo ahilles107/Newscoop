@@ -58,6 +58,7 @@ class ErrorController extends Zend_Controller_Action
         $notFound = array(
             Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER,
             Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION,
+            Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE
         );
 
         if (in_array($errors->type, $notFound)) {
@@ -70,24 +71,17 @@ class ErrorController extends Zend_Controller_Action
             return;
         }
 
-        switch ($errors->type) {
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-                // 404 error -- controller or action not found
-                $this->getResponse()->setHttpResponseCode(404);
-                $this->view->message = $translator->trans('Page not found', array(), 'bug_reporting');
-                break;
-            default:
-                // application error
-                $this->getResponse()->setHttpResponseCode(500);
-                $this->view->message = $translator->trans('Application error', array(), 'bug_reporting');
-                break;
+
+        $this->getResponse()->setHttpResponseCode(500);
+        if ($errors->exception instanceof \Exception) {
+            $this->view->message = $errors->exception->getMessage();
+        } else {
+            $this->view->message = $translator->trans('Application error', array(), 'bug_reporting');
         }
 
         if (defined('APPLICATION_ENV') && APPLICATION_ENV == 'development') {
             // conditionally display exceptions
-            if ($this->getInvokeArg('displayExceptions') == true) {
+            if ($this->getInvokeArg('displayExceptions') == true && $errors->exception instanceof \Exception) {
                 $this->view->exception = $errors->exception;
             }
 
