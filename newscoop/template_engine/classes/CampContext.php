@@ -1329,7 +1329,6 @@ final class CampContext
     public function isPluginEnabled($pluginName)
     {
         $pluginsService = \Zend_Registry::get('container')->get('newscoop.plugins.service');
-        ladybug_dump_die($pluginsService->isEnabled($pluginName));
         if ($pluginsService->isEnabled($pluginName)) {
             return true;
         }
