@@ -233,7 +233,14 @@ final class CampTemplate extends SmartyBC
      */
     public function trigger_error($p_message, $p_smarty = null)
     {
-        throw new \Newscoop\NewscoopException("Newscoop error: $p_message");
-
+        if (php_sapi_name() !== 'cli') {
+            throw new \Newscoop\NewscoopException("Newscoop error: $p_message");
+        } else {
+            if (is_object($p_smarty)) {
+                $p_smarty->trigger_error($p_message);
+            } else {
+                trigger_error("Newscoop error: $p_message");
+            }
+        }
     }
 }
