@@ -17,7 +17,9 @@ use Doctrine\DBAL\Connection;
 use Newscoop\Installer\Services;
 use Symfony\Component\Console\Input\ArrayInput;
 
-define("DIR_SEP", DIRECTORY_SEPARATOR);
+if (!defined('DIR_SEP')) {
+    define("DIR_SEP", DIRECTORY_SEPARATOR);
+}
 
 /**
  * Install newscoop with command line

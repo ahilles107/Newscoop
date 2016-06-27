@@ -1,8 +1,6 @@
-<?php 
+<?php
 
 namespace Newscoop\Controller\Action\Helper\Datatable\Adapter;
-
-use string;
 
 abstract class AAdapter
 {
@@ -12,19 +10,19 @@ abstract class AAdapter
      * @return array;
      */
     abstract public function getData( array $params, array $cols );
-    
+
     /**
      * Search data
      * @return array;
      */
     abstract public function search( $query, array $cols = null );
-    
+
     /**
      * Sort data
      * @return array;
      */
     abstract public function sort( array $p_cols );
-    
+
     /**
      * Get total count
      * @param array $p_params
@@ -32,5 +30,5 @@ abstract class AAdapter
      * @return int
      */
     abstract public function getCount( array $p_params = array(), array $p_cols = array() );
-    
+
 }

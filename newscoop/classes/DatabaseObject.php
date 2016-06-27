@@ -79,7 +79,7 @@ class DatabaseObject
 	 *		The column names of this table.  These are optional.
 	 *
 	 */
-	public function DatabaseObject($p_columnNames = null)
+	public function __construct($p_columnNames = null)
 	{
 	    if (!is_null($p_columnNames)) {
 	    	$this->setColumnNames($p_columnNames);
