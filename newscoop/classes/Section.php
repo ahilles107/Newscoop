@@ -51,7 +51,7 @@ class Section extends DatabaseObject
     public function Section($p_publicationId = null, $p_issueNumber = null,
                             $p_languageId = null, $p_sectionNumber = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         $this->m_data['IdPublication'] = $p_publicationId;
         $this->m_data['NrIssue'] = $p_issueNumber;
         $this->m_data['IdLanguage'] = $p_languageId;

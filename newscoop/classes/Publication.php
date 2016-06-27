@@ -50,7 +50,7 @@ class Publication extends DatabaseObject {
 	 */
 	public function Publication($p_publicationId = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['Id'] = $p_publicationId;
 		if ($this->keyValuesExist()) {
 			$this->fetch();

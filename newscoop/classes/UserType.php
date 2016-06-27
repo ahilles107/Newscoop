@@ -39,7 +39,7 @@ class UserType extends DatabaseObject
      */
     public function UserType($p_userTypeId = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         if (is_numeric($p_userTypeId) && $p_userTypeId > 0) {
             $this->m_data['group_id'] = $p_userTypeId;
             if ($this->keyValuesExist()) {

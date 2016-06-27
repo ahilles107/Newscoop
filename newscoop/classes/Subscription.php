@@ -28,7 +28,7 @@ class Subscription extends DatabaseObject
 	 */
 	public function Subscription($p_id = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['Id'] = $p_id;
 		if (!is_null($p_id)) {
 			$this->fetch();

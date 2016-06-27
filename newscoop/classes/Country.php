@@ -27,7 +27,7 @@ class Country extends DatabaseObject {
 	 */
 	public function Country($p_code = null, $p_languageId = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['Code'] = $p_code;
 		$this->m_data['IdLanguage'] = $p_languageId;
 		if ($this->keyValuesExist()) {

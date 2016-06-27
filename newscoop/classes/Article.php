@@ -127,7 +127,7 @@ class Article extends DatabaseObject
      */
     public function Article($p_languageId = null, $p_articleNumber = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         $this->m_data['IdLanguage'] = $p_languageId;
         $this->m_data['Number'] = $p_articleNumber;
         if ($this->keyValuesExist()) {

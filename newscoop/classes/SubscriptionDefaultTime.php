@@ -21,7 +21,7 @@ class SubscriptionDefaultTime extends DatabaseObject
 
   	public function SubscriptionDefaultTime($p_countryCode = null, $p_publicationId = null)
   	{
-  		parent::DatabaseObject($this->m_columnNames);
+  		parent::__construct($this->m_columnNames);
   		$this->m_data['CountryCode'] = $p_countryCode;
   		$this->m_data['IdPublication'] = $p_publicationId;
   		if ($this->keyValuesExist()) {

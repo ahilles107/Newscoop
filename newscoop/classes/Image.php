@@ -47,7 +47,7 @@ class Image extends DatabaseObject
      */
     public function Image($p_imageId = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         $this->m_data['Id'] = $p_imageId;
         if ($this->keyValuesExist()) {
             $this->fetch();

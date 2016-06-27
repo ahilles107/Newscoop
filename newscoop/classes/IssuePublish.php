@@ -36,7 +36,7 @@ class IssuePublish extends DatabaseObject {
 	 */
 	public function IssuePublish($p_id = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['id'] = $p_id;
 		if ($this->keyValuesExist()) {
 			$this->fetch();

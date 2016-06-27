@@ -25,7 +25,7 @@ class ArticleTopic extends DatabaseObject
 
     public function ArticleTopic()
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
     } // constructor
 
     /**

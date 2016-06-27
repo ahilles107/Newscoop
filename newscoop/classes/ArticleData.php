@@ -41,7 +41,7 @@ class ArticleData extends DatabaseObject
         foreach ($dbColumns as $columnMetaData) {
             $this->m_columnNames[] = $columnMetaData->getName();
         }
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         $this->m_data['NrArticle'] = $p_articleNumber;
         $this->m_data['IdLanguage'] = $p_languageId;
         if ($this->keyValuesExist()) {

@@ -27,7 +27,7 @@ class AuthorAlias extends DatabaseObject
      */
     public function __construct($p_idOrName = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         if (is_numeric($p_idOrName)) {
             $this->m_data['id'] = $p_idOrName;
             $this->fetch();

@@ -22,7 +22,7 @@ class Template extends DatabaseObject {
      */
     public function Template($p_templateIdOrName = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         if (is_numeric($p_templateIdOrName)) {
             $this->m_data['Id'] = $p_templateIdOrName;
         } elseif (is_string($p_templateIdOrName)) {

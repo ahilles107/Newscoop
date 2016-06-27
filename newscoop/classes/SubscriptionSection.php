@@ -31,7 +31,7 @@ class SubscriptionSection extends DatabaseObject
 	                                    $p_sectionNumber = null,
 	                                    $p_languageId = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['IdSubscription'] = $p_subscriptionId;
 		$this->m_data['SectionNumber'] = $p_sectionNumber;
 		$this->m_data['IdLanguage'] = $p_languageId;

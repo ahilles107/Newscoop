@@ -25,7 +25,7 @@ class Alias extends DatabaseObject {
 	 */
 	public function Alias($p_idOrName = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		if (is_numeric($p_idOrName)) {
     		$this->m_data['Id'] = $p_idOrName;
 			$this->fetch();

@@ -79,7 +79,7 @@ class User extends DatabaseObject {
      */
     public function User($p_userId = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         if (is_numeric($p_userId) && ($p_userId > 0)) {
             $this->m_data['Id'] = $p_userId;
             if ($this->keyValuesExist()) {

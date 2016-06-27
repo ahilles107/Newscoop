@@ -25,7 +25,7 @@ class TimeUnit extends DatabaseObject {
 	 */
 	public function TimeUnit($p_unit = null, $p_languageId = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['Unit'] = $p_unit;
 		$this->m_data['IdLanguage'] = 1;
 		if (!is_null($p_languageId)) {

@@ -77,7 +77,7 @@ class IPAccess extends DatabaseObject {
 	 */
 	public function IPAccess($p_userId = null, $p_startIP = null, $p_addresses = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['IdUser'] = $p_userId;
 		$startIP = null;
 		if (!is_null($p_startIP)) {

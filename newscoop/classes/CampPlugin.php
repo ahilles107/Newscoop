@@ -33,7 +33,7 @@ class CampPlugin extends DatabaseObject
 
     public function CampPlugin($p_name = null, $p_version = null, $enabled = null)
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
         $this->m_data['Name'] = $p_name;
 
         if (!is_null($p_version)) {

@@ -49,7 +49,7 @@ class Issue extends DatabaseObject {
 	public function Issue($p_publicationId = null, $p_languageId = null,
 	$p_issueNumber = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['IdPublication'] = $p_publicationId;
 		$this->m_data['IdLanguage'] = $p_languageId;
 		$this->m_data['Number'] = $p_issueNumber;

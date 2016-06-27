@@ -32,7 +32,7 @@ class ArticleIndex extends DatabaseObject
 
     public function ArticleIndex()
     {
-        parent::DatabaseObject($this->m_columnNames);
+        parent::__construct($this->m_columnNames);
     } // constructor
 
 

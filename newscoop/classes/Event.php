@@ -22,7 +22,7 @@ class Event extends DatabaseObject {
 
 	public function Event($p_id = null, $p_languageId = null)
 	{
-		parent::DatabaseObject($this->m_columnNames);
+		parent::__construct($this->m_columnNames);
 		$this->m_data['Id'] = $p_id;
 		$this->m_data['IdLanguage'] = $p_languageId;
 		if (!is_null($p_id) && !is_null($p_languageId)) {
