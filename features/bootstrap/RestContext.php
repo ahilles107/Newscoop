@@ -169,8 +169,9 @@ class RestContext extends BehatContext
         $this->response = $this->client->getLastResponse();
 
         $this->processResponse();
-
-        $this->access_token = $this->responseData['access_token'];
+        if (isset($this->responseData['access_token'])) {
+            $this->access_token = $this->responseData['access_token'];
+        }
     }
 
     /**
@@ -189,7 +190,9 @@ class RestContext extends BehatContext
 
         $this->processResponse();
 
-        $this->access_token = $this->responseData['access_token'];
+        if (isset($this->responseData['access_token'])) {
+            $this->access_token = $this->responseData['access_token'];
+        }
     }
 
     /**

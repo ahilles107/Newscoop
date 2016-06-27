@@ -35,7 +35,8 @@ class SmartyView extends \Zend_View_Abstract
             'params' => $paramsForVector
         ));
 
-        $file = array_shift(func_get_args());
+        $arguments = func_get_args();
+        $file = array_shift($arguments);
         $templatesService->renderTemplate($file, $params);
     }
 
